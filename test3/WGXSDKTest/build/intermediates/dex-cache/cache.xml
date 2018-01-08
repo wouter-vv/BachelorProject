@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="C:\Users\Walter\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-v4\18.0.0\support-v4-18.0.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="44ec51e9d395a47aab135e5e1b556c0007442156">
+        <dex dex="D:\school\erasmusproj\BeaconsTest\test3\WGXSDKTest\app\build\intermediates\pre-dexed\debug\support-v4-18.0.0_d1601b8830d5f4c8820c35064dbb58db1db78835.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\school\erasmusproj\BeaconsTest\test3\WGXSDKTest\app\libs\wgx ibeacon sdk V2.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="1b73323399200fa1115441fea4095070dd1268eb">
+        <dex dex="D:\school\erasmusproj\BeaconsTest\test3\WGXSDKTest\app\build\intermediates\pre-dexed\debug\wgx ibeacon sdk V2.0_b4d2ad29155e1717342d33eb6687413a20f506be.jar" />
+    </item>
+
+</items>
