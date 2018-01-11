@@ -39,6 +39,20 @@ public class ScanActivity extends Activity{
 	private ProgressDialog progressDialog;
 	private BeaconStateListener mBeaconStateListener;
 	private boolean isConnected = false;
+    private int counter1 = 0;
+    private int counter2 = 0;
+    private int counter3 = 0;
+    private int counter4 = 0;
+	int amtAvgIterations = 10;
+    private int med1[] = new int[amtAvgIterations];
+    private int med2[] = new int[amtAvgIterations];
+    private int med3[] = new int[amtAvgIterations];
+    private int med4[] = new int[amtAvgIterations];
+	private boolean outlier1 = false;
+	private boolean outlier2 = false;
+	private boolean outlier3 = false;
+	private boolean outlier4 = false;
+
 
 
 	@Override
@@ -172,10 +186,99 @@ public class ScanActivity extends Activity{
 		}
 
 		int rssi = device.getRssi();
-		if (rssi < 0) {
-			map.put("rssi", "rssi: " + rssi);
-		} else {
-			map.put("rssi", "rssi: " + ((70 - rssi) < 0 ? (70 - rssi) : (rssi - 70)));
+
+		if (rssi < 0 && rssi > -100) {
+			if (counter1 == amtAvgIterations) {
+				counter1=0;
+			}
+			if(counter1!=0) {
+				//check if the value isnt 10 higher of lower than the previous one to filter out random values
+				if (!(med1[counter1] < (med1[counter1 - 1] -= 10) || med1[counter1] < (med1[counter1 - 1] += 10)) || outlier1 == true) {
+					med1[counter1] = rssi;
+					counter1++;
+					int avg=0;
+					for (int val : med1) {
+						avg+=val;
+					}
+					avg/=amtAvgIterations;
+					map.put("rssi", "rssi: " + avg/*calculateDistance(avg, device.getTxPower())*/);
+					outlier1 = false;
+				}
+				else {
+					// if there are 2 continious outliers, that means the distance really changed
+					outlier1 = true;
+				}
+			}
+
+			if(counter2 <= amtAvgIterations && device.getName().equals("WXG2")) {
+				if (counter2 == amtAvgIterations) {
+					counter2=0;
+				}
+				if(counter2!=0) {
+					//check if the value isnt 10 higher of lower than the previous one to filter out random values
+					if (!(med2[counter2] < (med2[counter2 - 1] -= 10) || med2[counter2] < (med2[counter2 - 1] += 10)) || outlier2 == true) {
+						med2[counter2] = rssi;
+						counter2++;
+						int avg=0;
+						for (int val : med2) {
+							avg+=val;
+						}
+						avg/=amtAvgIterations;
+						map.put("rssi", "rssi: " + avg/*calculateDistance(avg, device.getTxPower())*/);
+						outlier2 = false;
+					}
+					else {
+						// if there are 2 continious outliers, that means the distance really changed
+						outlier2 = true;
+					}
+				}
+			}
+			if(counter3 <= amtAvgIterations && device.getName().equals("WXG3")) {
+				if (counter3 == amtAvgIterations) {
+					counter3=0;
+				}
+				if(counter3!=0) {
+					//check if the value isnt 10 higher of lower than the previous one to filter out random values
+					if (!(med3[counter3] < (med3[counter3 - 1] -= 10) || med3[counter3] < (med3[counter3 - 1] += 10)) || outlier3 == true) {
+						med3[counter3] = rssi;
+						counter3++;
+						int avg=0;
+						for (int val : med3) {
+							avg+=val;
+						}
+						avg/=amtAvgIterations;
+						map.put("rssi", "rssi: " + avg/*calculateDistance(avg, device.getTxPower())*/);
+						outlier3 = false;
+					}
+					else {
+						// if there are 2 continious outliers, that means the distance really changed
+						outlier3 = true;
+					}
+				}
+
+			}
+			if(counter4 <= amtAvgIterations && device.getName().equals("WXG4")) {
+				if (counter4 == amtAvgIterations) {
+					counter4 = 0;
+				}
+				if (counter4 != 0) {
+					//check if the value isnt 10 higher of lower than the previous one to filter out random values
+					if (!(med4[counter4] < (med4[counter4 - 1] -= 10) || med4[counter4] < (med4[counter4 - 1] += 10)) || outlier4 == true) {
+						med4[counter4] = rssi;
+						counter4++;
+						int avg = 0;
+						for (int val : med4) {
+							avg += val;
+						}
+						avg /= amtAvgIterations;
+						map.put("rssi", "rssi: " + avg/*calculateDistance(avg, device.getTxPower())*/);
+						outlier4 = false;
+					} else {
+						// if there are 2 continious outliers, that means the distance really changed
+						outlier4 = true;
+					}
+				}
+			}
 		}
 
 		map.put("uuid", "uuid: " + device.getUuid());
@@ -186,7 +289,7 @@ public class ScanActivity extends Activity{
 		map.put("temp", "temp: " + device.getTemprature() + "℃");
 
 		if (device.getBattery() > 0 && device.getBattery() <= 100) {
-			map.put("battery", "battery: " + device.getBattery() + "%");
+			map.put("battery", "battery: " + device.getRssi() + "%");
 
 		} else {
 			map.put("battery", "0%");
@@ -199,6 +302,23 @@ public class ScanActivity extends Activity{
 		map.put("timeout", 0);
 
 		return map;
+	}
+
+	public double calculateDistance(int rssi, int txPower) {
+		txPower = -65; //hard coded power value. Usually ranges between -59 to -65
+
+		if (rssi == 0) {
+			return -1.0;
+		}
+
+		double ratio = rssi*1.0/txPower;
+		if (ratio < 1.0) {
+			return Math.pow(ratio,10);
+		}
+		else {
+			double distance =  (0.89976)*Math.pow(ratio,7.7095) + 0.111;
+			return distance;
+		}
 	}
 
 	private void mapSort(List<Map<String, Object>> list) {

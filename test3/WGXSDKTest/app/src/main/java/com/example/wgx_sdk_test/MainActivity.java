@@ -88,7 +88,6 @@ public class MainActivity extends FragmentActivity {
 	// step4 : Set your uuid,major,minor and other beacon parms here.
 	public void doWriteConfigClick(View v) {
 		BeaconConfig config = new BeaconConfig();
-		
 		config.setmCurrentUUID1("e2c56db5dffb48d2b060d0f5a71096e1");
 		config.setmDevicePwd("140611"); //default pwd
 		config.setmMajor1(12);

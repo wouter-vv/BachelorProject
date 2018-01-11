@@ -16,12 +16,12 @@
         "source": "D:\\school\\erasmusproj\\ErasmusProject\\test3\\WGXSDKTest\\app\\src\\main\\res\\drawable-hdpi\\icon_arrow_right.png"
     },
     {
-        "merged": "D:\\school\\erasmusproj\\ErasmusProject\\test3\\WGXSDKTest\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\icon_rssi_3.png",
-        "source": "D:\\school\\erasmusproj\\ErasmusProject\\test3\\WGXSDKTest\\app\\src\\main\\res\\drawable-hdpi\\icon_rssi_3.png"
-    },
-    {
         "merged": "D:\\school\\erasmusproj\\ErasmusProject\\test3\\WGXSDKTest\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\icon_batt_5.png",
         "source": "D:\\school\\erasmusproj\\ErasmusProject\\test3\\WGXSDKTest\\app\\src\\main\\res\\drawable-hdpi\\icon_batt_5.png"
+    },
+    {
+        "merged": "D:\\school\\erasmusproj\\ErasmusProject\\test3\\WGXSDKTest\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\icon_rssi_3.png",
+        "source": "D:\\school\\erasmusproj\\ErasmusProject\\test3\\WGXSDKTest\\app\\src\\main\\res\\drawable-hdpi\\icon_rssi_3.png"
     },
     {
         "merged": "D:\\school\\erasmusproj\\BeaconsTest\\test3\\WGXSDKTest\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\icon_rssi_1.png",

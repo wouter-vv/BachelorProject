@@ -32,7 +32,7 @@ public final class R {
         public static final int action_settings=0x7f08000e;
         public static final int addr=0x7f080004;
         public static final int battery=0x7f08000c;
-        public static final int button4=0x7f080003;
+        public static final int button=0x7f080003;
         public static final int container=0x7f080000;
         public static final int device_name=0x7f080005;
         public static final int iamge_arrow_connected=0x7f08000d;
