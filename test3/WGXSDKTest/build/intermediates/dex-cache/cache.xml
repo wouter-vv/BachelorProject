@@ -19,5 +19,14 @@
         sha1="1b73323399200fa1115441fea4095070dd1268eb">
         <dex dex="D:\school\erasmusproj\BeaconsTest\test3\WGXSDKTest\app\build\intermediates\pre-dexed\debug\wgx ibeacon sdk V2.0_b4d2ad29155e1717342d33eb6687413a20f506be.jar" />
     </item>
+    <item
+        is-multidex="false"
+        jar="D:\school\erasmusproj\ErasmusProject\test3\WGXSDKTest\app\libs\wgx ibeacon sdk V2.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="1b73323399200fa1115441fea4095070dd1268eb">
+        <dex dex="D:\school\erasmusproj\ErasmusProject\test3\WGXSDKTest\app\build\intermediates\pre-dexed\debug\wgx ibeacon sdk V2.0_7e409ff355129142d9579377ae6b34a391f20092.jar" />
+    </item>
 
 </items>

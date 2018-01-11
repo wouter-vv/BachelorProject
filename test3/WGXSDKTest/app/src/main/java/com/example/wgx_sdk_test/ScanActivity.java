@@ -188,25 +188,37 @@ public class ScanActivity extends Activity{
 		int rssi = device.getRssi();
 
 		if (rssi < 0 && rssi > -100) {
-			if (counter1 == amtAvgIterations) {
-				counter1=0;
-			}
-			if(counter1!=0) {
-				//check if the value isnt 10 higher of lower than the previous one to filter out random values
-				if (!(med1[counter1] < (med1[counter1 - 1] -= 10) || med1[counter1] < (med1[counter1 - 1] += 10)) || outlier1 == true) {
-					med1[counter1] = rssi;
-					counter1++;
-					int avg=0;
-					for (int val : med1) {
-						avg+=val;
+			if(counter1 <= amtAvgIterations && device.getName().equals("WXG1")) {
+				if (counter1 == amtAvgIterations) {
+					counter1 = 0;
+				}
+				if (counter1 != 0) {
+					//check if the value isnt 10 higher of lower than the previous one to filter out random values
+					if (!(med1[counter1] < (med1[counter1 - 1] -= 10) || med1[counter1] < (med1[counter1 - 1] += 10)) || outlier1 == true) {
+						med1[counter1] = rssi;
+						counter1++;
+						int avg = 0;
+						for (int val : med1) {
+							avg += val;
+						}
+						avg /= amtAvgIterations;
+						map.put("rssi", "rssi: " + avg/*calculateDistance(avg, device.getTxPower())*/);
+						outlier1 = false;
+					} else {
+						// if there are 2 continious outliers, that means the distance really changed
+						outlier1 = true;
 					}
-					avg/=amtAvgIterations;
-					map.put("rssi", "rssi: " + avg/*calculateDistance(avg, device.getTxPower())*/);
-					outlier1 = false;
 				}
 				else {
-					// if there are 2 continious outliers, that means the distance really changed
-					outlier1 = true;
+					med1[counter1] = rssi;
+					counter1++;
+					int avg = 0;
+					for (int val : med1) {
+						avg += val;
+					}
+					avg /= amtAvgIterations;
+					map.put("rssi", "rssi: " + avg/*calculateDistance(avg, device.getTxPower())*/);
+					outlier1 = false;
 				}
 			}
 
@@ -232,6 +244,17 @@ public class ScanActivity extends Activity{
 						outlier2 = true;
 					}
 				}
+				else {
+					med2[counter2] = rssi;
+					counter2++;
+					int avg=0;
+					for (int val : med2) {
+						avg+=val;
+					}
+					avg/=amtAvgIterations;
+					map.put("rssi", "rssi: " + avg/*calculateDistance(avg, device.getTxPower())*/);
+					outlier2 = false;
+				}
 			}
 			if(counter3 <= amtAvgIterations && device.getName().equals("WXG3")) {
 				if (counter3 == amtAvgIterations) {
@@ -255,6 +278,17 @@ public class ScanActivity extends Activity{
 						outlier3 = true;
 					}
 				}
+				else {
+					med3[counter3] = rssi;
+					counter3++;
+					int avg=0;
+					for (int val : med3) {
+						avg+=val;
+					}
+					avg/=amtAvgIterations;
+					map.put("rssi", "rssi: " + avg/*calculateDistance(avg, device.getTxPower())*/);
+					outlier3 = false;
+				}
 
 			}
 			if(counter4 <= amtAvgIterations && device.getName().equals("WXG4")) {
@@ -277,6 +311,17 @@ public class ScanActivity extends Activity{
 						// if there are 2 continious outliers, that means the distance really changed
 						outlier4 = true;
 					}
+				}
+				else {
+					med4[counter4] = rssi;
+					counter4++;
+					int avg = 0;
+					for (int val : med4) {
+						avg += val;
+					}
+					avg /= amtAvgIterations;
+					map.put("rssi", "rssi: " + avg/*calculateDistance(avg, device.getTxPower())*/);
+					outlier4 = false;
 				}
 			}
 		}
