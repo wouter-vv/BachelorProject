@@ -1,5 +1,9 @@
 [
     {
+        "merged": "C:\\Users\\Thomas\\Desktop\\ErasmusProject\\test3\\WGXSDKTest\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\ic_launcher.png",
+        "source": "C:\\Users\\Thomas\\Desktop\\ErasmusProject\\test3\\WGXSDKTest\\app\\src\\main\\res\\drawable-xxhdpi\\ic_launcher.png"
+    },
+    {
         "merged": "D:\\school\\erasmusproj\\ErasmusProject\\test3\\WGXSDKTest\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\ic_launcher.png",
         "source": "D:\\school\\erasmusproj\\ErasmusProject\\test3\\WGXSDKTest\\app\\src\\main\\res\\drawable-xxhdpi\\ic_launcher.png"
     },

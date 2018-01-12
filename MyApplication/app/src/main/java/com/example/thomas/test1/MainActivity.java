@@ -9,6 +9,11 @@ import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
@@ -18,7 +23,11 @@ import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
+import android.widget.LinearLayout.LayoutParams;
 
 public class MainActivity extends AppCompatActivity implements BeaconConsumer{
 
@@ -26,10 +35,25 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer{
     private BeaconManager beaconManager;
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
 
+
+    List<Integer> WXG1RSSI = new ArrayList<Integer>();
+    List<Integer> WXG2RSSI = new ArrayList<Integer>();
+    List<Integer> WXG3RSSI = new ArrayList<Integer>();
+    List<Integer> WXG4RSSI = new ArrayList<Integer>();
+
+    List<String> AvailableBeacons = new ArrayList<>();
+    ArrayAdapter<String> adapter;
+    ListView lv;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        lv = (ListView) findViewById(R.id.list);
+        adapter=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, AvailableBeacons);
+        lv.setAdapter(adapter);
+
         initAndroid6();
     }
 
@@ -97,6 +121,21 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer{
         beaconManager.unbind(this);
     }
 
+
+
+
+    public boolean listContainsString(List<String> Beacons, String beaconName) {
+        for(String str: Beacons) {
+            if(str.trim().contains(beaconName))
+                return true;
+        }
+        return false;
+    }
+    public void addTextField(){
+
+
+    }
+
     @Override
     public void onBeaconServiceConnect() {
         Log.i(TAG,"Start");
@@ -104,10 +143,38 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer{
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
                 if (beacons.size() > 0) {
-                    Log.i(TAG, "The first beacon name " + beacons.iterator().next().getBluetoothName()
+                    if(listContainsString(AvailableBeacons,beacons.iterator().next().getBluetoothName())) {
+                        if (beacons.iterator().next().getBluetoothName().equals("WXG1")) {
+                            WXG1RSSI.add(beacons.iterator().next().getRssi());
+                        }
+                        else if(beacons.iterator().next().getBluetoothName().equals("WXG2")) {
+                            WXG2RSSI.add(beacons.iterator().next().getRssi());
+                        }
+                        else if(beacons.iterator().next().getBluetoothName().equals("WXG3")) {
+                            WXG3RSSI.add(beacons.iterator().next().getRssi());
+                        }
+                        else if(beacons.iterator().next().getBluetoothName().equals("WXG4")) {
+                            WXG4RSSI.add(beacons.iterator().next().getRssi());
+                        }
+                    }
+                    else {
+                        AvailableBeacons.add(beacons.iterator().next().getBluetoothName());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
+
+
+
+
+                    Log.i(TAG,"The first beacon name " + beacons.iterator().next().getBluetoothName() + " " + beacons.iterator().next().getBluetoothAddress());
+                    /*Log.i(TAG, "The first beacon name " + beacons.iterator().next().getBluetoothName()
                             + "; RSSI: " + beacons.iterator().next().getRssi()
                             + " I see is about "+beacons.iterator().next().getDistance()+" meters away. TXPower: " + beacons.iterator().next().getTxPower()
-                            + " UUID: "+ beacons.iterator().next().getServiceUuid());
+                            + " UUID: "+ beacons.iterator().next().getServiceUuid());*/
                     //double distance = calculateDistance(beacons.iterator().next().getRssi(), beacons.iterator().next().getTxPower());
                     //Log.i(TAG, "Name " + beacons.iterator().next().getBluetoothName() + " distance:" + distance);
                 }
@@ -120,14 +187,4 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer{
         }
     }
 
-    public double calculateDistance(int rssi, int txPower) {
-        double ratio = rssi*1.0/txPower;
-        if (ratio < 1.0) {
-            return Math.pow(ratio,10);
-        }
-        else {
-            double distance =  (0.89976)*Math.pow(ratio,7.7095) + 0.111;
-            return distance;
-        }
-    }
 }
