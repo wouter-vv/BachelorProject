@@ -1,0 +1,14 @@
+Blauwe beacon informatie:
+
+UUID:
+e2c56db5dffb48d2b060d0f5a71096e1
+
+PWD:
+140611
+
+Major:
+12
+
+Minor:
+34
+
