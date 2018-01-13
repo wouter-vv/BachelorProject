@@ -16,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
         IpaddressEt = (EditText) findViewById(R.id.txtBeacon1);
 
     }
+
+
     public void OnLogin(View view) {
         String username = UsernameEt.getText().toString();
         String password = PasswordEt.getText().toString();

@@ -33,5 +33,30 @@
             android:onClick="RegisterBeacon"
             android:text="Register Beacons" />
 
+        <Button
+            android:id="@+id/btnScanBeacons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="Scan Beacons"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:onClick="ScanBeacons"/>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/btnScanBeacons"
+            android:layout_marginTop="17dp"
+            android:text="Delete Beacon Data"
+            android:onClick="DeleteData"/>
+
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

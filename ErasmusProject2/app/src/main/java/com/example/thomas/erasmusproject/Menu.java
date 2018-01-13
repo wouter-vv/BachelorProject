@@ -23,4 +23,17 @@ public class Menu extends AppCompatActivity {
         Intent StartAddDevice = new Intent(this, addDevice.class);
         startActivity(StartAddDevice);
     }
+    public void ScanBeacons(View view) {
+        String type = "getDevices";
+        BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+        backgroundWorker.execute(type);
+        /*Intent StartScanBeacons = new Intent(this, scanbeacons.class);
+        startActivity(StartScanBeacons);*/
+    }
+    public void DeleteData(View view) {
+        String type = "deleteData";
+        BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+        backgroundWorker.execute(type);
+
+    }
 }

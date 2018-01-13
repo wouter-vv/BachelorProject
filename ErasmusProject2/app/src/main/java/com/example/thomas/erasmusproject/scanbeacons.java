@@ -1,35 +1,34 @@
-package com.example.thomas.test1;
+package com.example.thomas.erasmusproject;
 
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.RemoteException;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
-import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
-import android.widget.LinearLayout.LayoutParams;
-
-public class MainActivity extends AppCompatActivity implements BeaconConsumer{
+public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
 
     protected static final String TAG = "RangingActivity";
     private BeaconManager beaconManager;
@@ -45,21 +44,34 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer{
     ArrayAdapter<String> adapter;
     ListView lv;
 
+    String[] devicesArray;
+    HashMap<String, ArrayList<Integer>> deviceData = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_scanbeacons);
+
+        //Gets the devices who where put in the database from SharedPreferences
+        SharedPreferences userDetails = getSharedPreferences("Device", MODE_PRIVATE);
+        String devicesString = userDetails.getString("Devices", "");
+        devicesArray = devicesString.split(" ");
+
         lv = (ListView) findViewById(R.id.list);
+
         adapter=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, AvailableBeacons);
         lv.setAdapter(adapter);
 
         initAndroid6();
     }
 
-    /**
-     * code to make the bluetoothconnection work for android version 6+
-     */
+
+    public void btnBack() {
+        Intent StartMenu = new Intent(this, Menu.class);
+        startActivity(StartMenu);
+    }
+
+
     public void initAndroid6() {
 
         beaconManager = BeaconManager.getInstanceForApplication(this);
@@ -75,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer{
                 builder.setPositiveButton(android.R.string.ok, null);
                 builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
 
+                    @RequiresApi(api = Build.VERSION_CODES.M)
                     public void onDismiss(DialogInterface dialog) {
                         requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
                     }
@@ -83,13 +96,13 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer{
             }
         }
     }
-
     /**
      * ask for the result of the request of the new permission
      * @param requestCode
      * @param permissions
      * @param grantResults
      */
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[],
@@ -114,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer{
             }
         }
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -132,7 +144,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer{
         return false;
     }
 
-
     @Override
     public void onBeaconServiceConnect() {
         Log.i(TAG,"Start");
@@ -140,7 +151,33 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer{
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
                 if (beacons.size() > 0) {
-                    if(listContainsString(AvailableBeacons,beacons.iterator().next().getBluetoothName())) {
+                    //Checks if the list of a found beacon already exists
+                    if(deviceData.containsKey(beacons.iterator().next().getBluetoothName())) {
+                        //Adds the RSSI data to the list of the specified beacon
+                        ArrayList<Integer> valuesList=deviceData.get(beacons.iterator().next().getBluetoothName());
+                        valuesList.add(beacons.iterator().next().getRssi());
+                        deviceData.put(beacons.iterator().next().getBluetoothName(), valuesList);
+                    }
+                    else {
+                        //checks if detected beacon device is in the database
+                        if(Arrays.asList(devicesArray).contains(beacons.iterator().next().getBluetoothName())) {
+
+                            //makes new list in the hashmap deviceData for the specified beacon
+                            ArrayList<Integer> values = new ArrayList<Integer>();
+                            deviceData.put(beacons.iterator().next().getBluetoothName(), values);
+
+                            //Adds found device on the screen
+                            AvailableBeacons.add(beacons.iterator().next().getBluetoothName());
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
+                        }
+
+                    }
+                    /*if(listContainsString(AvailableBeacons,beacons.iterator().next().getBluetoothName())) {
                         if (beacons.iterator().next().getBluetoothName().equals("WXG1")) {
                             WXG1RSSI.add(beacons.iterator().next().getRssi());
                         }
@@ -155,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer{
                         }
                     }
                     else {
+
                         AvailableBeacons.add(beacons.iterator().next().getBluetoothName());
                         runOnUiThread(new Runnable() {
                             @Override
@@ -162,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer{
                                 adapter.notifyDataSetChanged();
                             }
                         });
-                    }
+                    }*/
 
 
 
@@ -182,6 +220,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer{
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-    }
 
+    }
 }

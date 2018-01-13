@@ -18,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Arrays;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -166,6 +167,76 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else if(type.equals("getDevices")) {
+            try {
+                SharedPreferences userDetails = context.getSharedPreferences("ipaddress", MODE_PRIVATE);
+                String ipaddress = userDetails.getString("ipaddress", "");
+
+                String device_url = "http://" + ipaddress + "/getDevice.php" ;
+
+                URL url = new URL(device_url);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                outputStream.close();
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                String result="";
+                String line="";
+                while ((line = bufferedReader.readLine()) != null)   {
+                    result += line;
+                }
+                Log.d("test", result);
+                bufferedReader.close();
+                inputStream.close();
+                httpURLConnection.disconnect();
+                return result;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else if(type.equals("deleteData")) {
+            try {
+                SharedPreferences userDetails = context.getSharedPreferences("ipaddress", MODE_PRIVATE);
+                String ipaddress = userDetails.getString("ipaddress", "");
+
+                String device_url = "http://" + ipaddress + "/clearData.php" ;
+
+                URL url = new URL(device_url);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                outputStream.close();
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                String result="";
+                String line="";
+                while ((line = bufferedReader.readLine()) != null)   {
+                    result += line;
+                }
+                Log.d("test", result);
+                bufferedReader.close();
+                inputStream.close();
+                httpURLConnection.disconnect();
+                return result;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         return null;
@@ -179,12 +250,36 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        if(result.contentEquals("login success !!!!! Welcome user")) {
+        String[] parts = result.split("-");
+        if(parts[0].contentEquals("loginsuccess")) {
 
             context.startActivity(new Intent(context, Menu.class));
 
-        }else
-        {
+        }else if(parts[0].contentEquals("Devices:")) {
+
+            String[] yourArray = Arrays.copyOfRange(parts, 1, parts.length);
+
+            if(yourArray.length > 0) {
+
+                StringBuilder stringBuilder = new StringBuilder();
+                for(String s: yourArray) {
+                    stringBuilder.append(s);
+                    stringBuilder.append(" ");
+                }
+                SharedPreferences devices = context.getSharedPreferences("Device", MODE_PRIVATE);
+                SharedPreferences.Editor edit = devices.edit();
+                edit.clear();
+                edit.putString("Devices", devices.toString());
+                edit.commit();
+
+                context.startActivity(new Intent(context, scanbeacons.class));
+            } else {
+                alertDialog.setMessage("No devices found in database");
+                alertDialog.show();
+            }
+
+
+        } else if(parts[0].contentEquals("loginnot")) {
             alertDialog.setMessage(result);
             alertDialog.show();
         }
