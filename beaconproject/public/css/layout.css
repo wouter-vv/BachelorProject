@@ -53,7 +53,7 @@ SEARCH PAGE
 /***********
 BEERS PAGE
  ***********/
-#beertitle {
+#roomtitle {
     margin-left: 30px;
 }
 
@@ -134,6 +134,10 @@ REGISTER PAGE
 }
 #login_button {
     float: left;
+}
+
+.dl-horizontal dt {
+    width: 170px;
 }
 
 /***********

@@ -11,10 +11,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Devices extends Model
 {
-    protected $table = 'breweries';
-    protected $fillable = ['name', 'foundingyear' ];
-    public function beers()
+    protected $table = 'devices';
+    protected $fillable = ['nameRoom'];
+    public function rooms()
     {
-        return $this->hasMany('App\Beers', 'brewery_id');
+        return $this->hasOne('App\Rooms');
     }
 }

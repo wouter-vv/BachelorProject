@@ -17,3 +17,11 @@ Route::get('/', function () {
 });
 
 Route::get('/home', 'HomeController@index');
+Route::get('/rooms', 'RoomsController@index');
+Route::get('/rooms/{id}', 'RoomsController@detail')->where('id', '[0-9]+');
+
+
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
