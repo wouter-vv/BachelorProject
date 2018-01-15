@@ -1,6 +1,5 @@
 package com.example.thomas.erasmusproject;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,25 +14,38 @@ public class Menu extends AppCompatActivity {
     }
     public void RegisterBeacon(View view) {
 
-        Intent StartBeaconRegistration = new Intent(this, BeaconRegistration.class);
+        Intent StartBeaconRegistration = new Intent(this, RoomRegistration.class);
         startActivity(StartBeaconRegistration);
 
     }
-    public void AddDevice(View view) {
+    public void AddBeacon(View view) {
+        String type = "getRooms";
+        BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+        backgroundWorker.execute(type,"1");
+        /*
         Intent StartAddDevice = new Intent(this, addDevice.class);
-        startActivity(StartAddDevice);
+        startActivity(StartAddDevice);*/
     }
     public void ScanBeacons(View view) {
-        String type = "getDevices";
+        String type = "getRooms";
         BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-        backgroundWorker.execute(type);
+        backgroundWorker.execute(type,"0");
+
+        /*String type = "getDevices";
+        BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+        backgroundWorker.execute(type);*/
         /*Intent StartScanBeacons = new Intent(this, scanbeacons.class);
         startActivity(StartScanBeacons);*/
     }
     public void DeleteData(View view) {
-        String type = "deleteData";
+        String type = "deleteDevices";
         BackgroundWorker backgroundWorker = new BackgroundWorker(this);
         backgroundWorker.execute(type);
 
+    }
+    public void DeleteBeacons(View view) {
+        String type = "deleteData";
+        BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+        backgroundWorker.execute(type);
     }
 }

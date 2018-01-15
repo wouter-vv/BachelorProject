@@ -12,28 +12,16 @@
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
-        <EditText
-            android:id="@+id/txtUUID"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
-            android:layout_marginStart="24dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/btnRegister"
-            android:layout_toEndOf="@+id/btnRegister" />
 
-        <EditText
-            android:id="@+id/txtName"
+        <TextView
+            android:id="@+id/LblName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/txtUUID"
-            android:layout_alignStart="@+id/txtUUID"
-            android:layout_below="@+id/txtUUID"
-            android:layout_marginTop="22dp"
-            android:ems="10"
-            android:inputType="textPersonName" />
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:text="Name beacon:"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="84dp" />
 
         <Button
             android:id="@+id/btnCancel"
@@ -42,27 +30,52 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:text="Cancel"
-            android:onClick="OnCancel"/>
-
-        <TextView
-            android:id="@+id/txtName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Name"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="84dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:onClick="OnCancel"
+            android:text="Cancel" />
 
         <Button
             android:id="@+id/btnRegister"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button"
+            android:text="Register Beacon"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:onClick="OnRegister"/>
+
+        <EditText
+            android:id="@+id/txtBeaconName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/LblName"
+            android:layout_marginTop="18dp"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+        <Spinner
+            android:id="@+id/spinner1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"
+            android:layout_marginTop="65dp"
+            android:layout_below="@+id/txtBeaconName"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/txtBeaconName"
+            android:layout_alignEnd="@+id/txtBeaconName" />
+
+        <TextView
+            android:id="@+id/lblRoom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/txtBeaconName"
+            android:layout_marginTop="21dp"
+            android:text="Room" />
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

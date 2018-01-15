@@ -3,9 +3,8 @@
     package="com.example.thomas.erasmusproject">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
@@ -23,10 +22,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BeaconRegistration" />
+        <activity android:name=".RoomRegistration" />
         <activity android:name=".Menu" />
         <activity android:name=".addDevice" />
-        <activity android:name=".scanbeacons"></activity>
+        <activity android:name=".scanbeacons" />
+        <activity android:name=".ChooseRoomScanBeacons"></activity>
     </application>
 
 </manifest>

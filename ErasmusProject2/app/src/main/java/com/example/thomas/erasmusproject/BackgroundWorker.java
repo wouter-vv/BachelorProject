@@ -30,6 +30,7 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
     Context context;
     AlertDialog alertDialog;
     String Ipaddress;
+    int keuzeRoom;
 
     BackgroundWorker(Context ctx) {
         context = ctx;
@@ -82,10 +83,7 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
             }
         } else if(type.equals("rooms")) {
             try {
-                String UUID1  = params[1];
-                String UUID2  = params[2];
-                String UUID3  = params[3];
-                String UUID4  = params[4];
+                String Roomname  = params[1];
 
                 SharedPreferences userDetails = context.getSharedPreferences("ipaddress", MODE_PRIVATE);
                 String ipaddress = userDetails.getString("ipaddress", "");
@@ -99,10 +97,7 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
                 httpURLConnection.setDoInput(true);
                 OutputStream outputStream = httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                String post_data = URLEncoder.encode("UUID1", "UTF-8") + "=" + URLEncoder.encode(UUID1, "UTF-8") + "&"
-                        + URLEncoder.encode("UUID2", "UTF-8") + "=" + URLEncoder.encode(UUID2, "UTF-8") + "&"
-                        + URLEncoder.encode("UUID3", "UTF-8") + "=" + URLEncoder.encode(UUID3, "UTF-8") + "&"
-                        + URLEncoder.encode("UUID4", "UTF-8") + "=" + URLEncoder.encode(UUID4, "UTF-8");
+                String post_data = URLEncoder.encode("nameRoom", "UTF-8") + "=" + URLEncoder.encode(Roomname, "UTF-8");
                 bufferedWriter.write(post_data);
                 bufferedWriter.flush();
                 bufferedWriter.close();
@@ -127,9 +122,9 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
             }
         }else if(type.equals("device")) {
             try {
-                String UUID  = params[1];
-                String Name  = params[2];
 
+                String Name  = params[1];
+                String Room  = params[2];
 
                 SharedPreferences userDetails = context.getSharedPreferences("ipaddress", MODE_PRIVATE);
                 String ipaddress = userDetails.getString("ipaddress", "");
@@ -143,8 +138,11 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
                 httpURLConnection.setDoInput(true);
                 OutputStream outputStream = httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                String post_data = URLEncoder.encode("UUID", "UTF-8") + "=" + URLEncoder.encode(UUID, "UTF-8") + "&"
-                        + URLEncoder.encode("Name", "UTF-8") + "=" + URLEncoder.encode(Name, "UTF-8");
+
+
+                String post_data = URLEncoder.encode("Name", "UTF-8") + "=" + URLEncoder.encode(Name, "UTF-8")+ "&"
+                        + URLEncoder.encode("Room", "UTF-8") + "=" + URLEncoder.encode(Room, "UTF-8");;
+
                 bufferedWriter.write(post_data);
                 bufferedWriter.flush();
                 bufferedWriter.close();
@@ -174,6 +172,8 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
 
                 String device_url = "http://" + ipaddress + "/getDevice.php" ;
 
+                String Room = params[1];
+
                 URL url = new URL(device_url);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
@@ -181,6 +181,8 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
                 httpURLConnection.setDoInput(true);
                 OutputStream outputStream = httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                String post_data = URLEncoder.encode("Room", "UTF-8") + "=" + URLEncoder.encode(Room, "UTF-8");
+                bufferedWriter.write(post_data);
                 bufferedWriter.flush();
                 bufferedWriter.close();
                 outputStream.close();
@@ -237,6 +239,78 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else if(type.equals("getRooms")) {
+            try {
+                keuzeRoom = Integer.parseInt(params[1]);
+
+                SharedPreferences userDetails = context.getSharedPreferences("ipaddress", MODE_PRIVATE);
+                String ipaddress = userDetails.getString("ipaddress", "");
+
+                String device_url = "http://" + ipaddress + "/getRooms.php" ;
+
+                URL url = new URL(device_url);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                outputStream.close();
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                String result="";
+                String line="";
+                while ((line = bufferedReader.readLine()) != null)   {
+                    result += line;
+                }
+                Log.d("test", result);
+                bufferedReader.close();
+                inputStream.close();
+                httpURLConnection.disconnect();
+                return result;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else if(type.equals("deleteDevices")) {
+            try {
+                SharedPreferences userDetails = context.getSharedPreferences("ipaddress", MODE_PRIVATE);
+                String ipaddress = userDetails.getString("ipaddress", "");
+
+                String device_url = "http://" + ipaddress + "/deleteDevices.php" ;
+
+                URL url = new URL(device_url);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                outputStream.close();
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                String result="";
+                String line="";
+                while ((line = bufferedReader.readLine()) != null)   {
+                    result += line;
+                }
+                Log.d("test", result);
+                bufferedReader.close();
+                inputStream.close();
+                httpURLConnection.disconnect();
+                return result;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         return null;
@@ -251,37 +325,60 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
     @Override
     protected void onPostExecute(String result) {
         String[] parts = result.split(" ");
-        if(parts[0].contentEquals("loginsuccess")) {
-
+        if (parts[0].contentEquals("loginsuccess")) {
             context.startActivity(new Intent(context, Menu.class));
 
-        }else if(parts[0].contentEquals("Devices:")) {
-
+        } else if (parts[0].contentEquals("Devices:")) {
             String[] yourArray = Arrays.copyOfRange(parts, 1, parts.length);
-
-            if(yourArray.length > 0) {
-
-                String deviceString ="";
-                for(int i= 0; i < yourArray.length; i++) {
+            if (yourArray.length > 0) {
+                String deviceString = "";
+                for (int i = 0; i < yourArray.length; i++) {
                     deviceString += yourArray[i] + " ";
                 }
-
                 SharedPreferences devices = context.getSharedPreferences("Device", MODE_PRIVATE);
                 SharedPreferences.Editor edit = devices.edit();
                 edit.clear();
                 edit.putString("Devices", deviceString);
                 edit.commit();
-
                 context.startActivity(new Intent(context, scanbeacons.class));
             } else {
                 alertDialog.setMessage("No devices found in database");
                 alertDialog.show();
             }
 
-
-        } else if(parts[0].contentEquals("loginnot")) {
+        } else if (parts[0].contentEquals("loginnot")) {
             alertDialog.setMessage(result);
             alertDialog.show();
+
+        } else if (parts[0].contentEquals("Rooms:")) {
+            String[] yourArray = Arrays.copyOfRange(parts, 1, parts.length);
+            if (yourArray.length > 0) {
+                String roomString = "";
+                for (int i = 0; i < yourArray.length; i++) {
+                    roomString += yourArray[i] + " ";
+                }
+                SharedPreferences devices = context.getSharedPreferences("Room", MODE_PRIVATE);
+                SharedPreferences.Editor edit = devices.edit();
+                edit.clear();
+                edit.putString("Room", roomString);
+                edit.commit();
+                if(keuzeRoom == 0) {
+                    context.startActivity(new Intent(context, ChooseRoomScanBeacons.class));
+                } else if (keuzeRoom == 1) {
+                    context.startActivity(new Intent(context, addDevice.class));
+                }
+
+            }
+
+        }else if(parts[0].contentEquals("Roomsnot")) {
+            alertDialog.setMessage("No rooms found, register first a room");
+            alertDialog.show();
+
+        } else if(parts[0].contentEquals("InsertDeviceSuccesfull")) {
+            context.startActivity(new Intent(context, Menu.class));
+
+        } else if(parts[0].contentEquals("InsertRoomSuccessfull")) {
+            context.startActivity(new Intent(context, Menu.class));
         }
     }
 

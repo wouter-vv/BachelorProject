@@ -8,24 +8,24 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Spinner;
 
-public class addDevice extends AppCompatActivity {
-    EditText Name;
+public class ChooseRoomScanBeacons extends AppCompatActivity {
+
     String[] roomArray;
     String selectedRoom;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_device);
-        Name = (EditText)findViewById(R.id.txtBeaconName);
-        Spinner dropdown = (Spinner) findViewById(R.id.spinner1);
+        setContentView(R.layout.activity_choose_room_scan_beacons);
+
 
         SharedPreferences userDetails = getSharedPreferences("Room", MODE_PRIVATE);
         String devicesString = userDetails.getString("Room", "");
         roomArray = devicesString.split(" ");
 
+        Spinner dropdown = (Spinner) findViewById(R.id.spinner1);
         //Dropdown menu for selecting a room
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, roomArray);
         dropdown.setAdapter(adapter);
@@ -44,20 +44,14 @@ public class addDevice extends AppCompatActivity {
         });
     }
 
-
-
-
-    public void OnCancel(View view) {
-        Intent StartBeaconRegistration = new Intent(this, Menu.class);
-        startActivity(StartBeaconRegistration);
+    public void scanBeacons(View view) {
+        String type = "getDevices";
+        BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+        backgroundWorker.execute(type,selectedRoom);
     }
 
-    public void OnRegister(View view) {
-        if(Name.getText().toString().length() > 0) {
-            String str_name = Name.getText().toString();
-            String type = "device";
-            BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-            backgroundWorker.execute(type, str_name, selectedRoom);
-        }
+    public void back(View view) {
+        Intent StartBeaconRegistration = new Intent(this, Menu.class);
+        startActivity(StartBeaconRegistration);
     }
 }
