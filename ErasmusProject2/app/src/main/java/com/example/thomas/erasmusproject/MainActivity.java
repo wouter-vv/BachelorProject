@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         UsernameEt = (EditText) findViewById(R.id.txtBeacon2);
         PasswordEt = (EditText) findViewById(R.id.txtBeacon3);
-        IpaddressEt = (EditText) findViewById(R.id.txtBeacon1);
+        IpaddressEt = (EditText) findViewById(R.id.txtRoomName);
 
     }
 

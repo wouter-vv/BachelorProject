@@ -1,14 +1,15 @@
 <?php 
 require "connection.php";
-$UUID = $_POST["UUID"];
 $Name = $_POST["Name"];
-$mysql_qry = "insert into devices (UUID, Name) values ('$UUID', '$Name')";
+$Room = $_POST["Room"];
+$mysql_qry = "insert into Devices (name, Rooms_idRoom) values ('$Name', (select idRoom from Rooms where nameRoom like '$Room' ))";
 if($conn -> query($mysql_qry) === TRUE ) {
-echo "Insert Device Successfull";
+echo "InsertDeviceSuccesfull";
 }
 else {
 echo "Error: " . $mysql_qry . "<br>" . $conn->error;
 }
 $conn->close();
 ?>
-    
+
+
