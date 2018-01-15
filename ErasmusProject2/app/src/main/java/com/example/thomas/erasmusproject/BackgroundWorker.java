@@ -250,7 +250,7 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        String[] parts = result.split("-");
+        String[] parts = result.split(" ");
         if(parts[0].contentEquals("loginsuccess")) {
 
             context.startActivity(new Intent(context, Menu.class));
@@ -261,15 +261,15 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
 
             if(yourArray.length > 0) {
 
-                StringBuilder stringBuilder = new StringBuilder();
-                for(String s: yourArray) {
-                    stringBuilder.append(s);
-                    stringBuilder.append(" ");
+                String deviceString ="";
+                for(int i= 0; i < yourArray.length; i++) {
+                    deviceString += yourArray[i] + " ";
                 }
+
                 SharedPreferences devices = context.getSharedPreferences("Device", MODE_PRIVATE);
                 SharedPreferences.Editor edit = devices.edit();
                 edit.clear();
-                edit.putString("Devices", devices.toString());
+                edit.putString("Devices", deviceString);
                 edit.commit();
 
                 context.startActivity(new Intent(context, scanbeacons.class));

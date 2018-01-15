@@ -28,6 +28,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import android.os.Bundle;
+import android.os.Handler;
+
 public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
 
     protected static final String TAG = "RangingActivity";
@@ -47,6 +50,8 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
     String[] devicesArray;
     HashMap<String, ArrayList<Integer>> deviceData = new HashMap<>();
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,11 +70,6 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
         initAndroid6();
     }
 
-
-    public void btnBack() {
-        Intent StartMenu = new Intent(this, Menu.class);
-        startActivity(StartMenu);
-    }
 
 
     public void initAndroid6() {
@@ -160,7 +160,7 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
                     }
                     else {
                         //checks if detected beacon device is in the database
-                        if(Arrays.asList(devicesArray).contains(beacons.iterator().next().getBluetoothName())) {
+                        if (Arrays.asList(devicesArray).contains(beacons.iterator().next().getBluetoothName())) {
 
                             //makes new list in the hashmap deviceData for the specified beacon
                             ArrayList<Integer> values = new ArrayList<Integer>();
@@ -175,34 +175,10 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
                                 }
                             });
                         }
-
-                    }
-                    /*if(listContainsString(AvailableBeacons,beacons.iterator().next().getBluetoothName())) {
-                        if (beacons.iterator().next().getBluetoothName().equals("WXG1")) {
-                            WXG1RSSI.add(beacons.iterator().next().getRssi());
-                        }
-                        else if(beacons.iterator().next().getBluetoothName().equals("WXG2")) {
-                            WXG2RSSI.add(beacons.iterator().next().getRssi());
-                        }
-                        else if(beacons.iterator().next().getBluetoothName().equals("WXG3")) {
-                            WXG3RSSI.add(beacons.iterator().next().getRssi());
-                        }
-                        else if(beacons.iterator().next().getBluetoothName().equals("WXG4")) {
-                            WXG4RSSI.add(beacons.iterator().next().getRssi());
+                        else {
+                            Log.d("NEJE", "Geen beacons gevonden");
                         }
                     }
-                    else {
-
-                        AvailableBeacons.add(beacons.iterator().next().getBluetoothName());
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
-                    }*/
-
-
 
 
                     Log.i(TAG,"The first beacon name " + beacons.iterator().next().getBluetoothName() + " " + beacons.iterator().next().getBluetoothAddress());
