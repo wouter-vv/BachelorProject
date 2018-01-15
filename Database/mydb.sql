@@ -55,9 +55,8 @@ CREATE TABLE IF NOT EXISTS `ErasmusProject`.`Users` (
   `id` INT(11) NOT NULL,
   `name` VARCHAR(45) NULL DEFAULT NULL,
   `password` VARCHAR(45) NULL DEFAULT NULL,
-  `country` VARCHAR(45) NULL,
-  `city` VARCHAR(45) NULL,
   `email` VARCHAR(45) NULL,
+  `updated_at` DATETIME NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
