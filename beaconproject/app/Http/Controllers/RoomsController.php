@@ -16,6 +16,7 @@ class RoomsController extends Controller
     {
         $this->middleware('auth');
     }
+
     public function index()
     {
         $rooms = Rooms::get();

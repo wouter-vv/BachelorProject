@@ -11,10 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Rooms extends Model
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+
     protected $table = 'rooms';
     protected $fillable = ['nameRoom'];
     public function devices()

@@ -21,6 +21,7 @@ Route::get('/rooms', 'RoomsController@index');
 Route::get('/rooms/{id}', 'RoomsController@detail')->where('id', '[0-9]+');
 
 
+Route::get('logout', 'Auth\LoginController@logout');
 
 Auth::routes();
 
