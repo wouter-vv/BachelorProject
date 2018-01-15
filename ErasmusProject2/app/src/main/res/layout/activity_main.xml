@@ -9,48 +9,48 @@
     <RelativeLayout
         android:layout_width="368dp"
         android:layout_height="495dp"
-        tools:layout_editor_absoluteX="6dp"
-        tools:layout_editor_absoluteY="4dp">
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <EditText
-            android:id="@+id/txtUser"
+            android:id="@+id/txtBeacon2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:layout_marginTop="74dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Name"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:text="Thomas" />
 
         <EditText
-            android:id="@+id/txtPassword"
+            android:id="@+id/txtBeacon3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPassword"
-            android:text="Password"
-            android:layout_marginTop="11dp"
-            android:layout_below="@+id/txtUser"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Login"
-            android:onClick="OnLogin"
-            android:layout_below="@+id/txtPassword"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignRight="@+id/txtPassword"
-            android:layout_alignEnd="@+id/txtPassword" />
+            android:layout_below="@+id/txtBeacon2"
+            android:layout_marginTop="11dp"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:text="Azerty123" />
+
+        <Button
+            android:id="@+id/btnSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/txtBeacon3"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/txtBeacon3"
+            android:layout_below="@+id/txtBeacon3"
+            android:layout_marginTop="10dp"
+            android:onClick="OnLogin"
+            android:text="Login" />
 
         <EditText
-            android:id="@+id/txtIpaddress"
+            android:id="@+id/txtBeacon1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -59,6 +59,6 @@
             android:layout_marginTop="15dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Ip address" />
+            android:text="192.168.1.195" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

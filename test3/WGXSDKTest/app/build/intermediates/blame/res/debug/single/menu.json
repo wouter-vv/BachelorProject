@@ -1,5 +1,9 @@
 [
     {
+        "merged": "C:\\Users\\Thomas\\Desktop\\ErasmusProject\\test3\\WGXSDKTest\\app\\build\\intermediates\\res\\merged\\debug\\menu\\main.xml",
+        "source": "C:\\Users\\Thomas\\Desktop\\ErasmusProject\\test3\\WGXSDKTest\\app\\src\\main\\res\\menu\\main.xml"
+    },
+    {
         "merged": "D:\\school\\erasmusproj\\BeaconsTest\\test3\\WGXSDKTest\\app\\build\\intermediates\\res\\merged\\debug\\menu\\main.xml",
         "source": "D:\\school\\erasmusproj\\BeaconsTest\\test3\\WGXSDKTest\\app\\src\\main\\res\\menu\\main.xml"
     },

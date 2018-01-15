@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/myLayout"
-    tools:context="com.example.thomas.test1.MainActivity">
-
+    tools:context="com.example.thomas.erasmusproject.scanbeacons">
 
     <TextView
         android:id="@+id/IdBeaconinformation"
@@ -19,10 +19,11 @@
         android:layout_marginLeft="12dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="13dp" />
-    
+
     <ListView
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></ListView>
+
 </RelativeLayout>

@@ -11,17 +11,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        UsernameEt = (EditText) findViewById(R.id.txtUser);
-        PasswordEt = (EditText) findViewById(R.id.txtPassword);
-        IpaddressEt = (EditText) findViewById(R.id.txtIpaddress);
+        UsernameEt = (EditText) findViewById(R.id.txtBeacon2);
+        PasswordEt = (EditText) findViewById(R.id.txtBeacon3);
+        IpaddressEt = (EditText) findViewById(R.id.txtBeacon1);
 
     }
+
+
     public void OnLogin(View view) {
         String username = UsernameEt.getText().toString();
         String password = PasswordEt.getText().toString();
         String ipaddress = IpaddressEt.getText().toString();
         String type = "login";
         BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+        backgroundWorker.Ipaddress = ipaddress;
         backgroundWorker.execute(type,username,password,ipaddress);
 
     }
