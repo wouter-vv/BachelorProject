@@ -47,12 +47,7 @@ public class MainActivity extends FragmentActivity {
 						Log.i(TAG,"opCode=" + opCode);
 						 if (opCode == BeaconController.OP_GET_DEVICE_SCAN_DATA) {
 								ScanDataEntiy device = (ScanDataEntiy) data;
-								Log.i(TAG,"Name:" + device.getName());
-								Log.i(TAG,"Addr:" + device.getAddress() + " Rssi:" + device.getRssi());
-								Log.i(TAG,"UUID:" + device.getUuid());
-								Log.i(TAG,"Major:" + device.getMajor() + " Minor:" + device.getMinor());
-								Log.i(TAG,"Temperature:" + device.getTemprature()+"C");
-								Log.i(TAG,"X:" + device.getAccX()+" Y:" + device.getAccY()+" Z:" + device.getAccZ());
+
 						 }
 					}
 
@@ -83,32 +78,6 @@ public class MainActivity extends FragmentActivity {
 					
 					}});
 	
-	}
-	
-	// step4 : Set your uuid,major,minor and other beacon parms here.
-	public void doWriteConfigClick(View v) {
-		BeaconConfig config = new BeaconConfig();
-		config.setmCurrentUUID1("e2c56db5dffb48d2b060d0f5a71096e1");
-		config.setmDevicePwd("140611"); //default pwd
-		config.setmMajor1(12);
-		config.setmMinor1(34);
-		BeaconController.getInstance().doWriteConfig(config);
-	}
-	
-	// step5 : Modify the beacon password.
-	public void doResetPwdClick(View v) {
-		BeaconConfig config = new BeaconConfig();
-		config.setmDevicePwd("140612"); //current password
-		config.setmDeviceNewPwd("140611"); // new passowrd
-		BeaconController.getInstance().modifyDevicePwd(config);
-	}
-	
-	// step6 : Reset beacon to default config.
-	public void doResetConfigClick(View v) {
-		BeaconConfig config = new BeaconConfig();
-		config.setmDevicePwd("140611");
-		BeaconController.getInstance().resetBeaconConfig(config);
-		
 	}
 	
 	// step7: start scan beacon param.
