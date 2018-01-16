@@ -32,6 +32,7 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
     AlertDialog alertDialog;
     String Ipaddress;
     int keuzeRoom;
+    String selectedRoom;
 
     BackgroundWorker(Context ctx) {
         context = ctx;
@@ -67,7 +68,7 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
                 InputStream inputStream = httpURLConnection.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
                 String result="";
-                String line="";
+                String line;
                 while ((line = bufferedReader.readLine()) != null)   {
                     result += line;
                 }
@@ -106,7 +107,7 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
                 InputStream inputStream = httpURLConnection.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
                 String result="";
-                String line="";
+                String line;
                 while ((line = bufferedReader.readLine()) != null)   {
                     result += line;
                 }
@@ -142,7 +143,7 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
 
 
                 String post_data = URLEncoder.encode("Name", "UTF-8") + "=" + URLEncoder.encode(Name, "UTF-8")+ "&"
-                        + URLEncoder.encode("Room", "UTF-8") + "=" + URLEncoder.encode(Room, "UTF-8");;
+                        + URLEncoder.encode("Room", "UTF-8") + "=" + URLEncoder.encode(Room, "UTF-8");
 
                 bufferedWriter.write(post_data);
                 bufferedWriter.flush();
@@ -151,7 +152,7 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
                 InputStream inputStream = httpURLConnection.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
                 String result="";
-                String line="";
+                String line;
                 while ((line = bufferedReader.readLine()) != null)   {
                     result += line;
                 }
@@ -173,7 +174,7 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
 
                 String device_url = "http://" + ipaddress + "/getDevice.php" ;
 
-                String Room = params[1];
+                selectedRoom = params[1];
 
                 URL url = new URL(device_url);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -182,7 +183,7 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
                 httpURLConnection.setDoInput(true);
                 OutputStream outputStream = httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                String post_data = URLEncoder.encode("Room", "UTF-8") + "=" + URLEncoder.encode(Room, "UTF-8");
+                String post_data = URLEncoder.encode("Room", "UTF-8") + "=" + URLEncoder.encode(selectedRoom, "UTF-8");
                 bufferedWriter.write(post_data);
                 bufferedWriter.flush();
                 bufferedWriter.close();
@@ -190,7 +191,7 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
                 InputStream inputStream = httpURLConnection.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
                 String result="";
-                String line="";
+                String line;
                 while ((line = bufferedReader.readLine()) != null)   {
                     result += line;
                 }
@@ -225,7 +226,7 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
                 InputStream inputStream = httpURLConnection.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
                 String result="";
-                String line="";
+                String line;
                 while ((line = bufferedReader.readLine()) != null)   {
                     result += line;
                 }
@@ -262,7 +263,7 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
                 InputStream inputStream = httpURLConnection.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
                 String result="";
-                String line="";
+                String line;
                 while ((line = bufferedReader.readLine()) != null)   {
                     result += line;
                 }
@@ -297,7 +298,7 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
                 InputStream inputStream = httpURLConnection.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
                 String result="";
-                String line="";
+                String line;
                 while ((line = bufferedReader.readLine()) != null)   {
                     result += line;
                 }
@@ -307,6 +308,52 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
                 httpURLConnection.disconnect();
                 return result;
 
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else if(type.equals("setValues")) {
+            try {
+                SharedPreferences userDetails = context.getSharedPreferences("ipaddress", MODE_PRIVATE);
+                String ipaddress = userDetails.getString("ipaddress", "");
+
+                String nameRoom  = params[1];
+                String valueBeacon1  = params[2];
+                String valueBeacon2  = params[3];
+                String valueBeacon3  = params[4];
+                String valueBeacon4  = params[5];
+
+                String device_url = "http://" + ipaddress + "/insertValues.php" ;
+
+                URL url = new URL(device_url);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                String post_data = URLEncoder.encode("nameRoom", "UTF-8") + "=" + URLEncoder.encode(nameRoom, "UTF-8")+ "&"
+                        + URLEncoder.encode("valueBeacon1", "UTF-8") + "=" + URLEncoder.encode(valueBeacon1, "UTF-8")+ "&"
+                        + URLEncoder.encode("valueBeacon2", "UTF-8") + "=" + URLEncoder.encode(valueBeacon2, "UTF-8")+ "&"
+                        + URLEncoder.encode("valueBeacon3", "UTF-8") + "=" + URLEncoder.encode(valueBeacon3, "UTF-8")+ "&"
+                        + URLEncoder.encode("valueBeacon4", "UTF-8") + "=" + URLEncoder.encode(valueBeacon4, "UTF-8");
+                bufferedWriter.write(post_data);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                outputStream.close();
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                String result="";
+                String line;
+                while ((line = bufferedReader.readLine()) != null)   {
+                    result += line;
+                }
+                Log.d("test", result);
+                bufferedReader.close();
+                inputStream.close();
+                httpURLConnection.disconnect();
+                return result;
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -332,7 +379,7 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
         } else if (parts[0].contentEquals("Devices:")) {
             String[] yourArray = Arrays.copyOfRange(parts, 1, parts.length);
             if (yourArray.length > 0) {
-                String deviceString = "";
+                String deviceString = selectedRoom+ " ";
                 for (int i = 0; i < yourArray.length; i++) {
                     deviceString += yourArray[i] + " ";
                 }

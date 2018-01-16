@@ -2,7 +2,7 @@
 <?php 
 require "connection.php";
 $Room = $_POST["Room"];
-$mysql_qry = "select * from Devices where Rooms_idRoom like (select idRoom from Rooms where nameRoom like '$Room')";
+$mysql_qry = "select * from Devices where Rooms_id like (select id from Rooms where nameRoom like '$Room')";
 $result = mysqli_query($conn ,$mysql_qry);
 if(mysqli_num_rows($result) > 0) {
     $devices = "Devices: ";

@@ -34,7 +34,6 @@ public class ChooseRoomScanBeacons extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
                 selectedRoom = (String) parent.getItemAtPosition(position);
-                Log.d("item", (String) parent.getItemAtPosition(position));
             }
 
             @Override

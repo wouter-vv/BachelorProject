@@ -44,6 +44,8 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
     private BeaconManager beaconManager;
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
 
+    //Find devices of this room
+    String room;
 
     List<String> AvailableBeacons = new ArrayList<>();
 
@@ -54,6 +56,8 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
     ListView lvName;
     //***************************************
 
+    //Stores the beacons found in the database
+    String[] devicesArrayF;
     String[] devicesArray;
 
     //stores values for each device
@@ -69,37 +73,39 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanbeacons);
 
-        lvName = (ListView) findViewById(R.id.list);
-
 
         //Gets the devices who where put in the database from SharedPreferences
         SharedPreferences userDetails = getSharedPreferences("Device", MODE_PRIVATE);
         String devicesString = userDetails.getString("Devices", "");
-        devicesArray = devicesString.split(" ");
+        devicesArrayF = devicesString.split(" ");
+
 
         //Shows beacons found in database for specified room
         TextView beaconsDatabase = (TextView)findViewById(R.id.txtAvailable);
-        beaconsDatabase.setText("Beacons found in database: \n");
+        beaconsDatabase.setText("Beacons found in database for room: " + devicesArrayF[0] +": \n");
+        room = devicesArrayF[0];
+        devicesArray = Arrays.copyOfRange(devicesArrayF, 1, devicesArrayF.length);
         for(int i=0; i < devicesArray.length; i++) {
             beaconsDatabase.append(devicesArray[i] + "\n");
         }
 
+        //Initialisation of the list, show name and RSSI of found beacon
+        lvName = (ListView) findViewById(R.id.list);
         adapterBeacons=new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, AvailableBeacons);
         lvName.setAdapter(adapterBeacons);
 
 
 
-
+        //Calls function for higher android versions (5.0+), for authorisation
         initAndroid6();
 
         //sends data to databank every .. seconds
-
         ha.postDelayed(new Runnable() {
 
             @Override
             public void run() {
                 sendsDataDatabase();
-                ha.postDelayed(this, 10000);
+                ha.postDelayed(this, 5000);
             }
         }, 5000);
 
@@ -115,8 +121,39 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
         }
         return super.onKeyDown(keyCode, event);
     }
-
+    int[] teller1 = new int[4];
     public void sendsDataDatabase() {
+        HashMap<String, ArrayList<Integer>> deviceDataCopy = deviceData;
+        int[] avg = new int[4];
+        int size = deviceDataCopy.size();
+        int counter = 0;
+        for (Map.Entry<String, ArrayList<Integer>> entry : deviceDataCopy.entrySet()) {
+            ArrayList<Integer> values = entry.getValue();
+            ArrayList<Integer> valuesDefined = new ArrayList<Integer>(values.subList(teller1[counter], values.size()));
+            for(int j = 0; j < valuesDefined.size(); j++) {
+                avg[counter] += valuesDefined.get(j);
+            }
+            avg[counter] = avg[counter]/valuesDefined.size();
+            teller1[counter] = values.size();
+            counter++;
+        }
+
+        /*for(int i= 0; i < size; i ++) {
+            ArrayList<Integer> values = deviceDataCopy.get(i);
+            ArrayList<Integer> valuesDefined = new ArrayList<Integer>(values.subList(teller1[i], values.size()));
+            for(int j = 0; j < valuesDefined.size(); j++) {
+                avg[i] += valuesDefined.get(j);
+            }
+            avg[i] = avg[i]/valuesDefined.size();
+        }*/
+
+
+
+
+
+        String type = "setValues";
+        BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+        backgroundWorker.execute(type,room,avg[0]+"",avg[1]+"","0","0");
         Toast.makeText(this, "Timer",Toast.LENGTH_LONG).show();
     }
 
@@ -227,6 +264,10 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
                             //makes new list in the hashmap deviceData for the specified beacon
                             ArrayList<Integer> values = new ArrayList<Integer>();
                             deviceData.put(beacons.iterator().next().getBluetoothName(), values);
+
+                            ArrayList<Integer> valuesList=deviceData.get(beacons.iterator().next().getBluetoothName());
+                            valuesList.add(beacons.iterator().next().getRssi());
+                            deviceData.put(beacons.iterator().next().getBluetoothName(), valuesList);
 
                             //Adds found device on the screen
                             AvailableBeacons.add(beacons.iterator().next().getBluetoothName()+ "\nRSSI: " + beacons.iterator().next().getRssi());
