@@ -12,7 +12,9 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import org.altbeacon.beacon.Beacon;
@@ -22,14 +24,19 @@ import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
-import android.os.Bundle;
 import android.os.Handler;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
 
@@ -38,36 +45,79 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
 
 
-    List<Integer> WXG1RSSI = new ArrayList<Integer>();
-    List<Integer> WXG2RSSI = new ArrayList<Integer>();
-    List<Integer> WXG3RSSI = new ArrayList<Integer>();
-    List<Integer> WXG4RSSI = new ArrayList<Integer>();
-
     List<String> AvailableBeacons = new ArrayList<>();
-    ArrayAdapter<String> adapter;
-    ListView lv;
+
+
+    //Used for showing data on mobile screen
+    ArrayAdapter<String> adapterBeacons;
+
+    ListView lvName;
+    //***************************************
 
     String[] devicesArray;
+
+    //stores values for each device
     HashMap<String, ArrayList<Integer>> deviceData = new HashMap<>();
 
 
+
+    //timer
+    final Handler ha=new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanbeacons);
 
+        lvName = (ListView) findViewById(R.id.list);
+
+
         //Gets the devices who where put in the database from SharedPreferences
         SharedPreferences userDetails = getSharedPreferences("Device", MODE_PRIVATE);
         String devicesString = userDetails.getString("Devices", "");
         devicesArray = devicesString.split(" ");
 
-        lv = (ListView) findViewById(R.id.list);
+        //Shows beacons found in database for specified room
+        TextView beaconsDatabase = (TextView)findViewById(R.id.txtAvailable);
+        beaconsDatabase.setText("Beacons found in database: \n");
+        for(int i=0; i < devicesArray.length; i++) {
+            beaconsDatabase.append(devicesArray[i] + "\n");
+        }
 
-        adapter=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, AvailableBeacons);
-        lv.setAdapter(adapter);
+        adapterBeacons=new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, AvailableBeacons);
+        lvName.setAdapter(adapterBeacons);
+
+
+
 
         initAndroid6();
+
+        //sends data to databank every .. seconds
+
+        ha.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                sendsDataDatabase();
+                ha.postDelayed(this, 10000);
+            }
+        }, 5000);
+
+    }
+    //Checks if backkey is pressed, if so -> stop countdowntimer.
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            ha.removeCallbacksAndMessages(null);
+            Intent StartBeaconRoom = new Intent(this, ChooseRoomScanBeacons.class);
+            startActivity(StartBeaconRoom);
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public void sendsDataDatabase() {
+        Toast.makeText(this, "i am delayed",Toast.LENGTH_LONG).show();
     }
 
 
@@ -157,6 +207,27 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
                         ArrayList<Integer> valuesList=deviceData.get(beacons.iterator().next().getBluetoothName());
                         valuesList.add(beacons.iterator().next().getRssi());
                         deviceData.put(beacons.iterator().next().getBluetoothName(), valuesList);
+                        /******************************************************/
+
+                        //updates list with new RSSI
+                        int index=0;
+                        for(int i = 0; i < AvailableBeacons.size(); i++) {
+                            String s = AvailableBeacons.get(i);
+                            String split = s.split("\n")[0];
+                            if(split.contentEquals(beacons.iterator().next().getBluetoothName())) {
+                                index = i;
+                            }
+                        }
+                        //int index = AvailableBeacons.indexOf(beacons.iterator().next().getBluetoothName());
+                        AvailableBeacons.set(index, beacons.iterator().next().getBluetoothName() + "\nRSSI: " + beacons.iterator().next().getRssi());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                adapterBeacons.notifyDataSetChanged();
+                            }
+                        });
+                        //********************************
+
                     }
                     else {
                         //checks if detected beacon device is in the database
@@ -167,11 +238,11 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
                             deviceData.put(beacons.iterator().next().getBluetoothName(), values);
 
                             //Adds found device on the screen
-                            AvailableBeacons.add(beacons.iterator().next().getBluetoothName());
+                            AvailableBeacons.add(beacons.iterator().next().getBluetoothName()+ "\nRSSI: " + beacons.iterator().next().getRssi());
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    adapter.notifyDataSetChanged();
+                                    adapterBeacons.notifyDataSetChanged();
                                 }
                             });
                         }
