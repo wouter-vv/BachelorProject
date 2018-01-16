@@ -82,9 +82,8 @@
             <nav id="menu" class="pull-right">
                 <ul>
                     <li><a href="/home">Home</a></li>
-                    <li><a href="/">Data</a></li>
-                    <li><a href="/">Graphs</a></li>
-                    <li><a href="/">Search</a></li>
+                    <li><a href="/rooms">Rooms</a></li>
+                    <li><a href="/profile">Profile</a></li>
                 </ul>
             </nav>
         </div>
