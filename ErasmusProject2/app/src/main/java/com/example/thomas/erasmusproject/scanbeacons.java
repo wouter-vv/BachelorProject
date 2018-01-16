@@ -117,7 +117,7 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
     }
 
     public void sendsDataDatabase() {
-        Toast.makeText(this, "i am delayed",Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Timer",Toast.LENGTH_LONG).show();
     }
 
 
@@ -184,15 +184,6 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
     }
 
 
-
-
-    public boolean listContainsString(List<String> Beacons, String beaconName) {
-        for(String str: Beacons) {
-            if(str.trim().contains(beaconName))
-                return true;
-        }
-        return false;
-    }
 
     @Override
     public void onBeaconServiceConnect() {
