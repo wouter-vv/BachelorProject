@@ -100,16 +100,28 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
         initAndroid6();
 
         //sends data to databank every .. seconds
-        ha.postDelayed(new Runnable() {
+        /*ha.postDelayed(new Runnable() {
 
             @Override
             public void run() {
                 sendsDataDatabase();
                 ha.postDelayed(this, 5000);
             }
-        }, 5000);
-
+        }, 5000);*/
+        ha.post(sendData);
     }
+
+    private final Runnable sendData = new Runnable(){
+        public void run(){
+            sendsDataDatabase();
+            ha.postDelayed(this, 5000);
+        }
+    };
+
+
+
+
+
     //Checks if backkey is pressed, if so -> stop countdowntimer.
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -121,7 +133,9 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
         }
         return super.onKeyDown(keyCode, event);
     }
+
     int[] teller1 = new int[4];
+
     public void sendsDataDatabase() {
         HashMap<String, ArrayList<Integer>> deviceDataCopy = deviceData;
         int[] avg = new int[4];
@@ -138,23 +152,14 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
             counter++;
         }
 
-        /*for(int i= 0; i < size; i ++) {
-            ArrayList<Integer> values = deviceDataCopy.get(i);
-            ArrayList<Integer> valuesDefined = new ArrayList<Integer>(values.subList(teller1[i], values.size()));
-            for(int j = 0; j < valuesDefined.size(); j++) {
-                avg[i] += valuesDefined.get(j);
-            }
-            avg[i] = avg[i]/valuesDefined.size();
-        }*/
+            String type = "setValues";
+            BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+            backgroundWorker.execute(type,room,avg[0]+"",avg[1]+"","0","0");
 
 
 
 
-
-        String type = "setValues";
-        BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-        backgroundWorker.execute(type,room,avg[0]+"",avg[1]+"","0","0");
-        Toast.makeText(this, "Timer",Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Timer",Toast.LENGTH_LONG).show();
     }
 
 
