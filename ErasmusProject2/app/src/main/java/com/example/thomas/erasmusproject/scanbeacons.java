@@ -46,13 +46,11 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
 
     //Find devices of this room
     String room;
-
     List<String> AvailableBeacons = new ArrayList<>();
 
 
     //Used for showing data on mobile screen
     ArrayAdapter<String> adapterBeacons;
-
     ListView lvName;
     //***************************************
 
@@ -63,10 +61,9 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
     //stores values for each device
     HashMap<String, ArrayList<Integer>> deviceData = new HashMap<>();
 
+    //keeps data to send to database
+    Integer[] dataArray;
 
-
-    //timer
-    final Handler ha=new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,74 +91,31 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
         adapterBeacons=new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, AvailableBeacons);
         lvName.setAdapter(adapterBeacons);
 
-
+        //initialisation of the dataArray, keeps data for sending to database
+        dataArray = new Integer[4];
+        dataArray[0] = 0;
+        dataArray[1] = 0;
+        dataArray[2] = 0;
+        dataArray[3] = 0;
 
         //Calls function for higher android versions (5.0+), for authorisation
         initAndroid6();
-
-        //sends data to databank every .. seconds
-        /*ha.postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                sendsDataDatabase();
-                ha.postDelayed(this, 5000);
-            }
-        }, 5000);*/
-        ha.post(sendData);
     }
 
-    private final Runnable sendData = new Runnable(){
-        public void run(){
-            sendsDataDatabase();
-            ha.postDelayed(this, 5000);
-        }
-    };
 
 
-
-
-
-    //Checks if backkey is pressed, if so -> stop countdowntimer.
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            ha.removeCallbacksAndMessages(null);
-            Intent StartBeaconRoom = new Intent(this, ChooseRoomScanBeacons.class);
-            startActivity(StartBeaconRoom);
-            return false;
-        }
-        return super.onKeyDown(keyCode, event);
+    /**
+     * Sends data to the background worker and the background worker sends it to the database
+     * @param value1    rssi value of first beacon
+     * @param value2    rssi value of second beacon
+     * @param value3    rssi value of third beacon
+     * @param value4    rss1 value of fourth beacon
+     */
+    public void sendsDataDatabase(int value1, int value2, int value3, int value4) {
+        String type = "setValues";
+        BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+        backgroundWorker.execute(type,room,value1+"",value2+"",value3+"",value4 +"");
     }
-
-    int[] teller1 = new int[4];
-
-    public void sendsDataDatabase() {
-        HashMap<String, ArrayList<Integer>> deviceDataCopy = deviceData;
-        int[] avg = new int[4];
-        int size = deviceDataCopy.size();
-        int counter = 0;
-        for (Map.Entry<String, ArrayList<Integer>> entry : deviceDataCopy.entrySet()) {
-            ArrayList<Integer> values = entry.getValue();
-            ArrayList<Integer> valuesDefined = new ArrayList<Integer>(values.subList(teller1[counter], values.size()));
-            for(int j = 0; j < valuesDefined.size(); j++) {
-                avg[counter] += valuesDefined.get(j);
-            }
-            avg[counter] = avg[counter]/valuesDefined.size();
-            teller1[counter] = values.size();
-            counter++;
-        }
-
-            String type = "setValues";
-            BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-            backgroundWorker.execute(type,room,avg[0]+"",avg[1]+"","0","0");
-
-
-
-
-        //Toast.makeText(this, "Timer",Toast.LENGTH_LONG).show();
-    }
-
 
 
     public void initAndroid6() {
@@ -242,8 +196,8 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
                         deviceData.put(beacons.iterator().next().getBluetoothName(), valuesList);
                         /******************************************************/
 
-                        //updates list with new RSSI
                         int index=0;
+                        //updates list with new RSSI
                         for(int i = 0; i < AvailableBeacons.size(); i++) {
                             String s = AvailableBeacons.get(i);
                             String split = s.split("\n")[0];
@@ -251,6 +205,12 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
                                 index = i;
                             }
                         }
+                        //Sends data to writer to database
+                        dataArray[index] = beacons.iterator().next().getRssi();
+                        if(dataArray[0] != 0 && dataArray[1] != 0) {
+                            sendsDataDatabase(dataArray[0],dataArray[1], 0, 0);
+                        }
+
                         //int index = AvailableBeacons.indexOf(beacons.iterator().next().getBluetoothName());
                         AvailableBeacons.set(index, beacons.iterator().next().getBluetoothName() + "\nRSSI: " + beacons.iterator().next().getRssi());
                         runOnUiThread(new Runnable() {
