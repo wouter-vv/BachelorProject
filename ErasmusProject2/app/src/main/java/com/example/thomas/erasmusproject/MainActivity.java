@@ -1,5 +1,6 @@
 package com.example.thomas.erasmusproject;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +27,12 @@ public class MainActivity extends AppCompatActivity {
         BackgroundWorker backgroundWorker = new BackgroundWorker(this);
         backgroundWorker.Ipaddress = ipaddress;
         backgroundWorker.execute(type,username,password,ipaddress);
+
+    }
+
+    public void HeatmapActivity(View view) {
+        Intent ShowHeatmap = new Intent(this, Location.class);
+        startActivity(ShowHeatmap);
 
     }
 }

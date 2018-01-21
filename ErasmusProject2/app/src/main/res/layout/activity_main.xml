@@ -49,6 +49,19 @@
             android:onClick="OnLogin"
             android:text="Login" />
 
+        <Button
+            android:id="@+id/btnHeatmap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/txtBeacon3"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/txtBeacon3"
+            android:layout_below="@+id/btnSend"
+            android:layout_marginTop="10dp"
+            android:onClick="HeatmapActivity"
+            android:text="Heatmap" />
+
         <EditText
             android:id="@+id/txtRoomName"
             android:layout_width="wrap_content"
@@ -59,6 +72,6 @@
             android:layout_marginTop="15dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="192.168.1.195" />
+            android:text="192.168.1.163:8000" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

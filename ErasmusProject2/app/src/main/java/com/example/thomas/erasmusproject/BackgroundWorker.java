@@ -374,7 +374,7 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
     protected void onPostExecute(String result) {
         String[] parts = result.split(" ");
         /*
-            each if does a conentEquals. When a writing to the database returns a specific string the program knows which querie
+            each if does a contentEquals. When a writing to the database returns a specific string the program knows which querie
             was executed and knows what to do
          */
         if (parts[0].contentEquals("loginsuccess")) {

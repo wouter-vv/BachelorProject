@@ -26,6 +26,7 @@
         <activity android:name=".Menu" />
         <activity android:name=".addDevice" />
         <activity android:name=".scanbeacons" />
+        <activity android:name=".Location" />
         <activity android:name=".ChooseRoomScanBeacons"></activity>
     </application>
 
