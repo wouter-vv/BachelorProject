@@ -372,65 +372,69 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        String[] parts = result.split(" ");
+        try {
+            String[] parts = result.split(" ");
         /*
             each if does a contentEquals. When a writing to the database returns a specific string the program knows which querie
             was executed and knows what to do
          */
-        if (parts[0].contentEquals("loginsuccess")) {
-            context.startActivity(new Intent(context, Menu.class));
+            if (parts[0].contentEquals("loginsuccess")) {
+                context.startActivity(new Intent(context, Menu.class));
 
-        } else if (parts[0].contentEquals("Devices:")) {
-            String[] yourArray = Arrays.copyOfRange(parts, 1, parts.length);
-            if (yourArray.length > 0) {
-                String deviceString = selectedRoom+ " ";
-                for (int i = 0; i < yourArray.length; i++) {
-                    deviceString += yourArray[i] + " ";
+            } else if (parts[0].contentEquals("Devices:")) {
+                String[] yourArray = Arrays.copyOfRange(parts, 1, parts.length);
+                if (yourArray.length > 0) {
+                    String deviceString = selectedRoom + " ";
+                    for (int i = 0; i < yourArray.length; i++) {
+                        deviceString += yourArray[i] + " ";
+                    }
+                    SharedPreferences devices = context.getSharedPreferences("Device", MODE_PRIVATE);
+                    SharedPreferences.Editor edit = devices.edit();
+                    edit.clear();
+                    edit.putString("Devices", deviceString);
+                    edit.commit();
+                    context.startActivity(new Intent(context, scanbeacons.class));
+                } else {
+                    alertDialog.setMessage("No devices found in database");
+                    alertDialog.show();
                 }
-                SharedPreferences devices = context.getSharedPreferences("Device", MODE_PRIVATE);
-                SharedPreferences.Editor edit = devices.edit();
-                edit.clear();
-                edit.putString("Devices", deviceString);
-                edit.commit();
-                context.startActivity(new Intent(context, scanbeacons.class));
-            } else {
-                alertDialog.setMessage("No devices found in database");
+
+            } else if (parts[0].contentEquals("loginnot")) {
+                alertDialog.setMessage(result);
                 alertDialog.show();
-            }
 
-        } else if (parts[0].contentEquals("loginnot")) {
-            alertDialog.setMessage(result);
-            alertDialog.show();
+            } else if (parts[0].contentEquals("Rooms:")) {
+                String[] yourArray = Arrays.copyOfRange(parts, 1, parts.length);
+                if (yourArray.length > 0) {
+                    String roomString = "";
+                    for (int i = 0; i < yourArray.length; i++) {
+                        roomString += yourArray[i] + " ";
+                    }
+                    SharedPreferences devices = context.getSharedPreferences("Room", MODE_PRIVATE);
+                    SharedPreferences.Editor edit = devices.edit();
+                    edit.clear();
+                    edit.putString("Room", roomString);
+                    edit.commit();
+                    if (keuzeRoom == 0) {
+                        context.startActivity(new Intent(context, ChooseRoomScanBeacons.class));
+                    } else if (keuzeRoom == 1) {
+                        context.startActivity(new Intent(context, addDevice.class));
+                    }
 
-        } else if (parts[0].contentEquals("Rooms:")) {
-            String[] yourArray = Arrays.copyOfRange(parts, 1, parts.length);
-            if (yourArray.length > 0) {
-                String roomString = "";
-                for (int i = 0; i < yourArray.length; i++) {
-                    roomString += yourArray[i] + " ";
-                }
-                SharedPreferences devices = context.getSharedPreferences("Room", MODE_PRIVATE);
-                SharedPreferences.Editor edit = devices.edit();
-                edit.clear();
-                edit.putString("Room", roomString);
-                edit.commit();
-                if(keuzeRoom == 0) {
-                    context.startActivity(new Intent(context, ChooseRoomScanBeacons.class));
-                } else if (keuzeRoom == 1) {
-                    context.startActivity(new Intent(context, addDevice.class));
                 }
 
+            } else if (parts[0].contentEquals("Roomsnot")) {
+                alertDialog.setMessage("No rooms found, register first a room");
+                alertDialog.show();
+
+            } else if (parts[0].contentEquals("InsertDeviceSuccesfull")) {
+                context.startActivity(new Intent(context, Menu.class));
+
+            } else if (parts[0].contentEquals("InsertRoomSuccessfull")) {
+                context.startActivity(new Intent(context, Menu.class));
             }
-
-        }else if(parts[0].contentEquals("Roomsnot")) {
-            alertDialog.setMessage("No rooms found, register first a room");
-            alertDialog.show();
-
-        } else if(parts[0].contentEquals("InsertDeviceSuccesfull")) {
-            context.startActivity(new Intent(context, Menu.class));
-
-        } else if(parts[0].contentEquals("InsertRoomSuccessfull")) {
-            context.startActivity(new Intent(context, Menu.class));
+        } catch ( NullPointerException e) {
+            Log.e("test",e+"");
         }
     }
 

@@ -2,19 +2,24 @@ package com.example.thomas.erasmusproject;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Point;
 import android.os.Build;
 import android.os.RemoteException;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
+import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import org.altbeacon.beacon.Beacon;
@@ -24,19 +29,15 @@ import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import android.os.Handler;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import static java.lang.Math.pow;
 
 public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
 
@@ -63,13 +64,12 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
 
     //keeps data to send to database
     Integer[] dataArray;
-
+    Heatmap hm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanbeacons);
-
 
         //Gets the devices who where put in the database from SharedPreferences
         SharedPreferences userDetails = getSharedPreferences("Device", MODE_PRIVATE);
@@ -206,9 +206,17 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
                             }
                         }
                         //Sends data to writer to database
+
                         dataArray[index] = beacons.iterator().next().getRssi();
                         if(dataArray[0] != 0 && dataArray[1] != 0) {
                             sendsDataDatabase(dataArray[0],dataArray[1], 0, 0);
+                            if(c != null) {
+                                hm.values = calculateDistance(dataArray);
+                                dataArray = new Integer[] {0,0,0,0};
+                                hm.counterNew++;
+                                hm.test(hm);
+                            }
+                            dataArray = new Integer[] {0,0,0,0};
                         }
 
                         //int index = AvailableBeacons.indexOf(beacons.iterator().next().getBluetoothName());
@@ -264,6 +272,127 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+        findViewById(R.id.Heatmap).setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hm = new Heatmap(scanbeacons.this);
+                setContentView(hm);
+            }
+        });
+
+
+
 
     }
+    public static Context c;
+    private int[] calculateDistance(Integer[] dataArray) {
+        int txPower = -59;
+        int[] distances = new int[dataArray.length];
+        for (int i =0; i<dataArray.length; i++) {
+            distances[i]= (int)((Math.pow(10d, ((double) txPower - dataArray[i]) / (10 * 2)))*100);
+        }
+
+        return distances;
+    }
+    private static class Heatmap extends View implements BeaconConsumer{
+        public static int[] values = {0,0,250,250};
+        int roomWidth = 5;
+        int roomLength = 6;
+        int[][] room = new int[roomWidth][roomLength];
+        Point beacon1 = new Point(30,30);
+        Point beacon2 = new Point(30+roomWidth*200,30);
+        Point beacon3 = new Point(30,30+roomLength*200);
+        Point beacon4 = new Point(30+roomWidth*200,30+roomLength*200);
+        int counterOld = 0;
+        int counterNew = 0;
+
+        public void test (Heatmap hm) {
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    invalidate();
+                }
+            });
+        }
+        // CONSTRUCTOR
+        public Heatmap(Context context) {
+            super(context);
+            scanbeacons.c = context;
+            setFocusable(true);
+            for (int i = 0; i<roomWidth; i++ ) {
+                for (int j = 0; j<roomLength; j++ ) {
+                    room[i][j] =220;
+                }
+            }
+            setWillNotDraw(false);
+
+        }
+        @Override
+        protected void onDraw(Canvas canvas) {
+            Point location = trilateration();
+            Paint paint = new Paint();
+            for (int i = 0; i<roomWidth; i++ ) {
+                for (int j = 0; j<roomLength; j++ ) {
+                    Point currentRectTopLeft = new Point(30 + i*200, 30+j*200);
+                    Point currentRectBottomRight = new Point(230+i*200, 230+j*200);
+                    if (location.x > currentRectTopLeft.x && location.y > currentRectTopLeft.y) {
+                        if (location.x <= currentRectBottomRight.x && location.y <= currentRectBottomRight.y) {
+                            room[i][j] -= 10;
+                        }
+                    }
+                    paint.setColor(Color.rgb(room[i][j], room[i][j], room[i][j]));
+                    canvas.drawRect(30 + i * 200, 30 + j * 200, 230 + i * 200, 230 + j * 200, paint);
+                }
+            }
+            paint.setColor(Color.RED);
+            canvas.drawCircle(beacon1.x, beacon1.y ,50,paint);
+            canvas.drawCircle(beacon2.x ,beacon2.y ,50,paint);
+            canvas.drawCircle(beacon3.x ,beacon3.y ,50,paint);
+            canvas.drawCircle(beacon4.x ,beacon4.y ,50,paint);
+
+
+
+        }
+        public Point trilateration() {
+            float xa = beacon1.x;
+            float ya = beacon1.y;
+            float xb = beacon2.x;
+            float yb = beacon2.y;
+            float xc = beacon3.x;
+            float yc = beacon3.y;
+            float ra = (float)values[0];
+            float rb = (float)values[1];
+            float rc = (float)values[2];
+
+            double S = (pow(xc, 2.) - pow(xb, 2.) + pow(yc, 2.) - pow(yb, 2.) + pow(rb, 2.) - pow(rc, 2.)) / 2.0;
+            double T = (pow(xa, 2.) - pow(xb, 2.) + pow(ya, 2.) - pow(yb, 2.) + pow(rb, 2.) - pow(ra, 2.)) / 2.0;
+            double y = ((T * (xb - xc)) - (S * (xb - xa))) / (((ya - yb) * (xb - xc)) - ((yc - yb) * (xb - xa)));
+            double x = ((y * (ya - yb)) - T) / (xb - xa);
+
+            Log.d("a", x +"   " +y);
+            return new Point((int)x,(int)y);
+
+        }
+
+        @Override
+        public void onBeaconServiceConnect() {
+
+        }
+
+        @Override
+        public Context getApplicationContext() {
+            return null;
+        }
+
+        @Override
+        public void unbindService(ServiceConnection serviceConnection) {
+
+        }
+
+        @Override
+        public boolean bindService(Intent intent, ServiceConnection serviceConnection, int i) {
+            return false;
+        }
+    }
+
 }

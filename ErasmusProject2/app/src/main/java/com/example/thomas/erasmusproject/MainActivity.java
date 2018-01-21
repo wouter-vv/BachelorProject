@@ -29,11 +29,5 @@ public class MainActivity extends AppCompatActivity {
         backgroundWorker.execute(type,username,password,ipaddress);
 
     }
-
-    public void HeatmapActivity(View view) {
-        Intent ShowHeatmap = new Intent(this, Location.class);
-        startActivity(ShowHeatmap);
-
-    }
 }
 

@@ -25,7 +25,7 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		Log.i(TAG,"MainActivity onCreate");
-		
+
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
@@ -41,9 +41,9 @@ public class MainActivity extends FragmentActivity {
 		// step3 : Register beacon state listener
 		BeaconController.getInstance().setBeaconStateListener(
 				new BeaconStateListener() {
-					
+
 					@Override
-					public void onGetObject(int opCode, Object data) {		
+					public void onGetObject(int opCode, Object data) {
 						Log.i(TAG,"opCode=" + opCode);
 						 if (opCode == BeaconController.OP_GET_DEVICE_SCAN_DATA) {
 								ScanDataEntiy device = (ScanDataEntiy) data;
@@ -63,31 +63,31 @@ public class MainActivity extends FragmentActivity {
 						} else if (opCode == BeaconController.OP_BEACON_RESET_SUCCESS) {
 							ToastUtil.showShort(MainActivity.this, "reset success");
 							closeProgress();
-						}					
-						
+						}
+
 					}
 
 					@Override
-					public void onOperateError(int opCode, String reason) {	
+					public void onOperateError(int opCode, String reason) {
 						Log.i(TAG,"opCode=" + opCode);
 						if (opCode == BeaconController.OP_BEACON_WRITE_ERROR
 								||opCode == BeaconController.OP_SCAN_TIMEOUT){
 							ToastUtil.showShort(MainActivity.this, "write fail:" + reason);
 							closeProgress();
 						}
-					
+
 					}});
-	
+
 	}
-	
+
 	// step7: start scan beacon param.
 	public void doScanBeaconParam(View v){
 		//BeaconController.getInstance().startScanDevice();
-		Intent intent = new Intent(this, ScanActivity.class);  	
-		startActivity(intent);  
-        //this.finish();  
+		Intent intent = new Intent(this, ScanActivity.class);
+		startActivity(intent);
+        //this.finish();
 	}
-		
+
 	// step8 : unbind this activity
 	@Override
 	protected void onDestroy() {
@@ -95,7 +95,7 @@ public class MainActivity extends FragmentActivity {
 		BeaconController.getInstance().destroyService();
 		BeaconController.getInstance().unbindActiviyPage();
 	}
-	
+
 	private ProgressDialog progressDialog;
 
 	protected void showProgress() {
@@ -117,7 +117,7 @@ public class MainActivity extends FragmentActivity {
 	public static class PlaceholderFragment extends Fragment {
 
 		public PlaceholderFragment() {
-			
+
 		}
 
 		@Override

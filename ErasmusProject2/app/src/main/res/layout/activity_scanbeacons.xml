@@ -37,6 +37,15 @@
         android:paddingBottom="70dp"
         android:paddingRight="70dp"
         />
+    <Button
+        android:id="@+id/Heatmap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/IdBeaconinformation"
+        android:layout_alignStart="@+id/IdBeaconinformation"
+        android:layout_below="@+id/list"
+        android:text="View Heatmap"
+        />
 
 
 </RelativeLayout>
