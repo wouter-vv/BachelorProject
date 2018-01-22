@@ -38,6 +38,7 @@ public class Login extends AppCompatActivity {
             if(!password.contentEquals("")) {
                 if(!ipaddress.contentEquals("")) {
                     if(PATTERN.matcher(ipaddress).matches()) {
+                        //Deleting all the shared
                         SharedPreferences deleteDevice = this.getSharedPreferences("Device", this.MODE_PRIVATE);
                         deleteDevice.edit().remove("Devices").commit();
                         SharedPreferences deleteIp = this.getSharedPreferences("ipaddress", this.MODE_PRIVATE);

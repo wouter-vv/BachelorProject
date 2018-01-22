@@ -66,19 +66,23 @@ public class addDevice extends AppCompatActivity {
         if(!Name.getText().toString().contentEquals("")) {
             String str_name = Name.getText().toString();
 
+            //Calls the backgroundworker, who gets the beacons and puts them in shared preferences
             String type = "getDevices";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             backgroundWorker.execute(type,selectedRoom,"0");
 
-            //Gets the devices who where put in the database from SharedPreferences
+            //gets the beacons from shared preferences
             SharedPreferences userDetails = getSharedPreferences("Device", MODE_PRIVATE);
             String devicesString = userDetails.getString(selectedRoom, "");
             devicesArrayF = devicesString.split(" ");
 
-
+            //Checks if the added beacon isnt already registered
             if(!Arrays.asList(devicesArrayF).contains(str_name)){
+                //Adds the device to the the room
                 type = "device";
                 backgroundWorker = new BackgroundWorker(this);
+
+                //Makes sure that the added device is also in the shared preferences
                 backgroundWorker.execute(type, str_name, selectedRoom);
                 type = "getDevices";
                 backgroundWorker = new BackgroundWorker(this);
