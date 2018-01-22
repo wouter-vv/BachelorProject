@@ -349,29 +349,27 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
             canvas.drawCircle(beacon2.x ,beacon2.y ,50,paint);
             canvas.drawCircle(beacon3.x ,beacon3.y ,50,paint);
             canvas.drawCircle(beacon4.x ,beacon4.y ,50,paint);
-
-
-
         }
+        
         public Point trilateration() {
-            float xa = beacon1.x;
-            float ya = beacon1.y;
-            float xb = beacon2.x;
-            float yb = beacon2.y;
-            float xc = beacon3.x;
-            float yc = beacon3.y;
-            float ra = (float)values[0];
-            float rb = (float)values[1];
-            float rc = (float)values[2];
+            float beacon1X = beacon1.x;
+            float beacon1Y = beacon1.y;
+            float beacon2X = beacon2.x;
+            float beacon2Y = beacon2.y;
+            float beacon3X = beacon3.x;
+            float beacon3Y = beacon3.y;
+            float DistanceB1 = (float)values[0];
+            float DistanceB2 = (float)values[1];
+            float DistanceB3 = (float)values[2];
 
-            double S = (pow(xc, 2.) - pow(xb, 2.) + pow(yc, 2.) - pow(yb, 2.) + pow(rb, 2.) - pow(rc, 2.)) / 2.0;
-            double T = (pow(xa, 2.) - pow(xb, 2.) + pow(ya, 2.) - pow(yb, 2.) + pow(rb, 2.) - pow(ra, 2.)) / 2.0;
-            double y = ((T * (xb - xc)) - (S * (xb - xa))) / (((ya - yb) * (xb - xc)) - ((yc - yb) * (xb - xa)));
-            double x = ((y * (ya - yb)) - T) / (xb - xa);
-
-            Log.d("a", x +"   " +y);
+            double temp1 = (pow(beacon3X, 2.) - pow(beacon2X, 2.) + pow(beacon3Y, 2.) -
+                    pow(beacon2Y, 2.) + pow(DistanceB2, 2.) - pow(DistanceB3, 2.)) / 2.0;
+            double temp2 = (pow(beacon1X, 2.) - pow(beacon2X, 2.) + pow(beacon1Y, 2.) -
+                    pow(beacon2Y, 2.) + pow(DistanceB2, 2.) - pow(DistanceB1, 2.)) / 2.0;
+            double y = ((temp2 * (beacon2X - beacon3X)) - (temp1 * (beacon2X - beacon1X))) /
+                    (((beacon1Y - beacon2Y) * (beacon2X - beacon3X)) - ((beacon3Y - beacon2Y) * (beacon2X - beacon1X)));
+            double x = ((y * (beacon1Y - beacon2Y)) - temp2) / (beacon2X - beacon1X);
             return new Point((int)x,(int)y);
-
         }
 
         @Override
