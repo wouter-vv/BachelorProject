@@ -22,9 +22,6 @@ public class Menu extends AppCompatActivity {
         String type = "getRooms";
         BackgroundWorker backgroundWorker = new BackgroundWorker(this);
         backgroundWorker.execute(type,"1");
-        /*
-        Intent StartAddDevice = new Intent(this, addDevice.class);
-        startActivity(StartAddDevice);*/
     }
     public void ScanBeacons(View view) {
         String type = "getRooms";

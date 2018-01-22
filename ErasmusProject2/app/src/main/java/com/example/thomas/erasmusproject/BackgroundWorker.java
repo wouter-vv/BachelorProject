@@ -33,6 +33,7 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
     String Ipaddress;
     int keuzeRoom;
     String selectedRoom;
+    int keuzeGetDevices;
 
     BackgroundWorker(Context ctx) {
         context = ctx;
@@ -169,12 +170,15 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
             }
         }else if(type.equals("getDevices")) {
             try {
+
+
                 SharedPreferences userDetails = context.getSharedPreferences("ipaddress", MODE_PRIVATE);
                 String ipaddress = userDetails.getString("ipaddress", "");
 
                 String device_url = "http://" + ipaddress + "/getDevice.php" ;
 
                 selectedRoom = params[1];
+                keuzeGetDevices = Integer.parseInt(params[2]);
 
                 URL url = new URL(device_url);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -367,7 +371,6 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
     @Override
     protected void onPreExecute() {
         alertDialog = new AlertDialog.Builder(context).create();
-        alertDialog.setTitle("Login Status");
     }
 
     @Override
@@ -384,22 +387,31 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
             } else if (parts[0].contentEquals("Devices:")) {
                 String[] yourArray = Arrays.copyOfRange(parts, 1, parts.length);
                 if (yourArray.length > 0) {
-                    String deviceString = selectedRoom + " ";
+                    String deviceString="";
                     for (int i = 0; i < yourArray.length; i++) {
                         deviceString += yourArray[i] + " ";
                     }
                     SharedPreferences devices = context.getSharedPreferences("Device", MODE_PRIVATE);
                     SharedPreferences.Editor edit = devices.edit();
                     edit.clear();
-                    edit.putString("Devices", deviceString);
+                    edit.putString(selectedRoom, deviceString);
+                    edit.putString("SelectedRoom",selectedRoom);
                     edit.commit();
-                    context.startActivity(new Intent(context, scanbeacons.class));
+
+
+                    if(keuzeGetDevices == 1) {
+                        context.startActivity(new Intent(context, scanbeacons.class));
+                    }else if (keuzeGetDevices == 0) {
+
+                    }
                 } else {
+                    alertDialog.setTitle("ERROR");
                     alertDialog.setMessage("No devices found in database");
                     alertDialog.show();
                 }
 
             } else if (parts[0].contentEquals("loginnot")) {
+                alertDialog.setTitle("ERROR");
                 alertDialog.setMessage(result);
                 alertDialog.show();
 
@@ -424,6 +436,7 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
                 }
 
             } else if (parts[0].contentEquals("Roomsnot")) {
+                alertDialog.setTitle("ERROR");
                 alertDialog.setMessage("No rooms found, register first a room");
                 alertDialog.show();
 
@@ -432,9 +445,15 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
 
             } else if (parts[0].contentEquals("InsertRoomSuccessfull")) {
                 context.startActivity(new Intent(context, Menu.class));
+            } else if(parts[0].contentEquals("NoDevice")) {
+                alertDialog.setTitle("ERROR");
+                alertDialog.setMessage("No devices found, register first a device");
+                alertDialog.show();
             }
-        } catch ( NullPointerException e) {
-            Log.e("test",e+"");
+        } catch ( Exception e) {
+            alertDialog.setTitle("ERROR");
+            alertDialog.setMessage("Connection not succeeded");
+            alertDialog.show();
         }
     }
 

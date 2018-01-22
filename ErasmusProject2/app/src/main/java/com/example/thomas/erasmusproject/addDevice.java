@@ -1,5 +1,6 @@
 package com.example.thomas.erasmusproject;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -11,17 +12,26 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.util.Arrays;
+
 public class addDevice extends AppCompatActivity {
     EditText Name;
     String[] roomArray;
     String selectedRoom;
+    String[] devicesArrayF;
+
+    AlertDialog alertDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_device);
+        alertDialog = new AlertDialog.Builder(this).create();
+
         Name = (EditText)findViewById(R.id.txtBeaconName);
+
         Spinner dropdown = (Spinner) findViewById(R.id.spinner1);
 
+        //Get available rooms from the sharedPreferences
         SharedPreferences userDetails = getSharedPreferences("Room", MODE_PRIVATE);
         String devicesString = userDetails.getString("Room", "");
         roomArray = devicesString.split(" ");
@@ -53,11 +63,35 @@ public class addDevice extends AppCompatActivity {
     }
 
     public void OnRegister(View view) {
-        if(Name.getText().toString().length() > 0) {
+        if(!Name.getText().toString().contentEquals("")) {
             String str_name = Name.getText().toString();
-            String type = "device";
+
+            String type = "getDevices";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-            backgroundWorker.execute(type, str_name, selectedRoom);
+            backgroundWorker.execute(type,selectedRoom,"0");
+
+            //Gets the devices who where put in the database from SharedPreferences
+            SharedPreferences userDetails = getSharedPreferences("Device", MODE_PRIVATE);
+            String devicesString = userDetails.getString(selectedRoom, "");
+            devicesArrayF = devicesString.split(" ");
+
+
+            if(!Arrays.asList(devicesArrayF).contains(str_name)){
+                type = "device";
+                backgroundWorker = new BackgroundWorker(this);
+                backgroundWorker.execute(type, str_name, selectedRoom);
+                type = "getDevices";
+                backgroundWorker = new BackgroundWorker(this);
+                backgroundWorker.execute(type,selectedRoom,"0");
+            }else {
+                alertDialog.setTitle("ERROR");
+                alertDialog.setMessage("Beacon already exists in this room");
+                alertDialog.show();
+            }
+        }else {
+            alertDialog.setTitle("ERROR");
+            alertDialog.setMessage("Please enter a name");
+            alertDialog.show();
         }
     }
 }
