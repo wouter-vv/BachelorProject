@@ -188,7 +188,7 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
                 if (beacons.size() > 0) {
-                    //Checks if the list of a found beacon already exists
+                    //Checks if the list of a found beacon already exists in the database
                     if(deviceData.containsKey(beacons.iterator().next().getBluetoothName())) {
                         //Adds the RSSI data to the list of the specified beacon
                         ArrayList<Integer> valuesList=deviceData.get(beacons.iterator().next().getBluetoothName());
