@@ -66,6 +66,8 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
     Integer[] dataArray;
     Heatmap hm;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,15 +75,14 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
 
         //Gets the devices who where put in the database from SharedPreferences
         SharedPreferences userDetails = getSharedPreferences("Device", MODE_PRIVATE);
-        String devicesString = userDetails.getString("Devices", "");
-        devicesArrayF = devicesString.split(" ");
+        room = userDetails.getString("SelectedRoom", "");
+        String devicesString = userDetails.getString(room, "");
+        devicesArray = devicesString.split(" ");
 
 
         //Shows beacons found in database for specified room
         TextView beaconsDatabase = (TextView)findViewById(R.id.txtAvailable);
-        beaconsDatabase.setText("Beacons found in database for room: " + devicesArrayF[0] +": \n");
-        room = devicesArrayF[0];
-        devicesArray = Arrays.copyOfRange(devicesArrayF, 1, devicesArrayF.length);
+        beaconsDatabase.setText("Beacons found in database for room: " + room +": \n");
         for(int i=0; i < devicesArray.length; i++) {
             beaconsDatabase.append(devicesArray[i] + "\n");
         }
@@ -255,15 +256,7 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
                             Log.d("NEJE", "Geen beacons gevonden");
                         }
                     }
-
-
                     Log.i(TAG,"The first beacon name " + beacons.iterator().next().getBluetoothName() + " " + beacons.iterator().next().getBluetoothAddress());
-                    /*Log.i(TAG, "The first beacon name " + beacons.iterator().next().getBluetoothName()
-                            + "; RSSI: " + beacons.iterator().next().getRssi()
-                            + " I see is about "+beacons.iterator().next().getDistance()+" meters away. TXPower: " + beacons.iterator().next().getTxPower()
-                            + " UUID: "+ beacons.iterator().next().getServiceUuid());*/
-                    //double distance = calculateDistance(beacons.iterator().next().getRssi(), beacons.iterator().next().getTxPower());
-                    //Log.i(TAG, "Name " + beacons.iterator().next().getBluetoothName() + " distance:" + distance);
                 }
             }
         });

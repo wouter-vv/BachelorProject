@@ -33,6 +33,7 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
     String Ipaddress;
     int keuzeRoom;
     String selectedRoom;
+    int keuzeGetDevices;
 
     BackgroundWorker(Context ctx) {
         context = ctx;
@@ -45,13 +46,11 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
                 String user_name = params[1];
                 String password  = params[2];
                 String login_url = "http://" + params[3] + "/login.php" ;
-
                 SharedPreferences userDetails = context.getSharedPreferences("ipaddress", MODE_PRIVATE);
                 SharedPreferences.Editor edit = userDetails.edit();
                 edit.clear();
                 edit.putString("ipaddress", params[3].toString().trim());
                 edit.commit();
-
                 URL url = new URL(login_url);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
@@ -77,7 +76,6 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
                 inputStream.close();
                 httpURLConnection.disconnect();
                 return result;
-
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -86,12 +84,9 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
         } else if(type.equals("rooms")) {
             try {
                 String Roomname  = params[1];
-
                 SharedPreferences userDetails = context.getSharedPreferences("ipaddress", MODE_PRIVATE);
                 String ipaddress = userDetails.getString("ipaddress", "");
-
                 String room_url = "http://" + ipaddress + "/Rooms.php" ;
-
                 URL url = new URL(room_url);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
@@ -116,7 +111,6 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
                 inputStream.close();
                 httpURLConnection.disconnect();
                 return result;
-
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -124,15 +118,11 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
             }
         }else if(type.equals("device")) {
             try {
-
                 String Name  = params[1];
                 String Room  = params[2];
-
                 SharedPreferences userDetails = context.getSharedPreferences("ipaddress", MODE_PRIVATE);
                 String ipaddress = userDetails.getString("ipaddress", "");
-
                 String device_url = "http://" + ipaddress + "/device.php" ;
-
                 URL url = new URL(device_url);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
@@ -140,11 +130,8 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
                 httpURLConnection.setDoInput(true);
                 OutputStream outputStream = httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-
-
                 String post_data = URLEncoder.encode("Name", "UTF-8") + "=" + URLEncoder.encode(Name, "UTF-8")+ "&"
                         + URLEncoder.encode("Room", "UTF-8") + "=" + URLEncoder.encode(Room, "UTF-8");
-
                 bufferedWriter.write(post_data);
                 bufferedWriter.flush();
                 bufferedWriter.close();
@@ -171,11 +158,9 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
             try {
                 SharedPreferences userDetails = context.getSharedPreferences("ipaddress", MODE_PRIVATE);
                 String ipaddress = userDetails.getString("ipaddress", "");
-
                 String device_url = "http://" + ipaddress + "/getDevice.php" ;
-
                 selectedRoom = params[1];
-
+                keuzeGetDevices = Integer.parseInt(params[2]);
                 URL url = new URL(device_url);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
@@ -206,41 +191,6 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else if(type.equals("deleteData")) {
-            try {
-                SharedPreferences userDetails = context.getSharedPreferences("ipaddress", MODE_PRIVATE);
-                String ipaddress = userDetails.getString("ipaddress", "");
-
-                String device_url = "http://" + ipaddress + "/clearData.php" ;
-
-                URL url = new URL(device_url);
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                httpURLConnection.setRequestMethod("POST");
-                httpURLConnection.setDoOutput(true);
-                httpURLConnection.setDoInput(true);
-                OutputStream outputStream = httpURLConnection.getOutputStream();
-                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                bufferedWriter.flush();
-                bufferedWriter.close();
-                outputStream.close();
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
-                String result="";
-                String line;
-                while ((line = bufferedReader.readLine()) != null)   {
-                    result += line;
-                }
-                Log.d("test", result);
-                bufferedReader.close();
-                inputStream.close();
-                httpURLConnection.disconnect();
-                return result;
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }else if(type.equals("getRooms")) {
             try {
                 keuzeRoom = Integer.parseInt(params[1]);
@@ -249,41 +199,6 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
                 String ipaddress = userDetails.getString("ipaddress", "");
 
                 String device_url = "http://" + ipaddress + "/getRooms.php" ;
-
-                URL url = new URL(device_url);
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                httpURLConnection.setRequestMethod("POST");
-                httpURLConnection.setDoOutput(true);
-                httpURLConnection.setDoInput(true);
-                OutputStream outputStream = httpURLConnection.getOutputStream();
-                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                bufferedWriter.flush();
-                bufferedWriter.close();
-                outputStream.close();
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
-                String result="";
-                String line;
-                while ((line = bufferedReader.readLine()) != null)   {
-                    result += line;
-                }
-                Log.d("test", result);
-                bufferedReader.close();
-                inputStream.close();
-                httpURLConnection.disconnect();
-                return result;
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }else if(type.equals("deleteDevices")) {
-            try {
-                SharedPreferences userDetails = context.getSharedPreferences("ipaddress", MODE_PRIVATE);
-                String ipaddress = userDetails.getString("ipaddress", "");
-
-                String device_url = "http://" + ipaddress + "/deleteDevices.php" ;
 
                 URL url = new URL(device_url);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -360,14 +275,12 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
                 e.printStackTrace();
             }
         }
-
         return null;
     }
 
     @Override
     protected void onPreExecute() {
         alertDialog = new AlertDialog.Builder(context).create();
-        alertDialog.setTitle("Login Status");
     }
 
     @Override
@@ -384,22 +297,29 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
             } else if (parts[0].contentEquals("Devices:")) {
                 String[] yourArray = Arrays.copyOfRange(parts, 1, parts.length);
                 if (yourArray.length > 0) {
-                    String deviceString = selectedRoom + " ";
+                    String deviceString="";
                     for (int i = 0; i < yourArray.length; i++) {
                         deviceString += yourArray[i] + " ";
                     }
                     SharedPreferences devices = context.getSharedPreferences("Device", MODE_PRIVATE);
                     SharedPreferences.Editor edit = devices.edit();
                     edit.clear();
-                    edit.putString("Devices", deviceString);
+                    edit.putString(selectedRoom, deviceString);
+                    edit.putString("SelectedRoom",selectedRoom);
                     edit.commit();
-                    context.startActivity(new Intent(context, scanbeacons.class));
+
+
+                    if(keuzeGetDevices == 1) {
+                        context.startActivity(new Intent(context, scanbeacons.class));
+                    }
                 } else {
+                    alertDialog.setTitle("ERROR");
                     alertDialog.setMessage("No devices found in database");
                     alertDialog.show();
                 }
 
             } else if (parts[0].contentEquals("loginnot")) {
+                alertDialog.setTitle("ERROR");
                 alertDialog.setMessage(result);
                 alertDialog.show();
 
@@ -424,6 +344,7 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
                 }
 
             } else if (parts[0].contentEquals("Roomsnot")) {
+                alertDialog.setTitle("ERROR");
                 alertDialog.setMessage("No rooms found, register first a room");
                 alertDialog.show();
 
@@ -432,9 +353,15 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
 
             } else if (parts[0].contentEquals("InsertRoomSuccessfull")) {
                 context.startActivity(new Intent(context, Menu.class));
+            } else if(parts[0].contentEquals("NoDevice")) {
+                alertDialog.setTitle("ERROR");
+                alertDialog.setMessage("No devices found, register first a device");
+                alertDialog.show();
             }
-        } catch ( NullPointerException e) {
-            Log.e("test",e+"");
+        } catch ( Exception e) {
+            alertDialog.setTitle("ERROR");
+            alertDialog.setMessage("Connection not succeeded");
+            alertDialog.show();
         }
     }
 

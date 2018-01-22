@@ -12,7 +12,7 @@ if(mysqli_num_rows($result) > 0) {
     echo $devices;
 }
 else {
-echo "Devices not successfully received";
+echo "NoDevice successfully received";
 }
  
 ?>
