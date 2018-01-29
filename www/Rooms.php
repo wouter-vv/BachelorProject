@@ -2,7 +2,10 @@
 <?php 
 require "connection.php";
 $nameRoom = $_POST["nameRoom"];
-$mysql_qry = "insert into Rooms (nameRoom) values ('$nameRoom')";
+$width = (int)$_POST["width"];
+$length = (int)$_POST["length"];
+$description = $_POST["description"];
+$mysql_qry = "insert into Rooms (nameRoom, width, length, description) values ('$nameRoom','$width','$length','$description')";
 if($conn -> query($mysql_qry) === TRUE ) {
 echo "InsertRoomSuccessfull";
 }

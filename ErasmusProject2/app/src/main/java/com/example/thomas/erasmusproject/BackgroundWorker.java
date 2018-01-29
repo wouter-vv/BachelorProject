@@ -84,6 +84,9 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
         } else if(type.equals("rooms")) {
             try {
                 String Roomname  = params[1];
+                String with = params[2];
+                String length = params[3];
+                String description = params[4];
                 SharedPreferences userDetails = context.getSharedPreferences("ipaddress", MODE_PRIVATE);
                 String ipaddress = userDetails.getString("ipaddress", "");
                 String room_url = "http://" + ipaddress + "/Rooms.php" ;
@@ -94,7 +97,10 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
                 httpURLConnection.setDoInput(true);
                 OutputStream outputStream = httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                String post_data = URLEncoder.encode("nameRoom", "UTF-8") + "=" + URLEncoder.encode(Roomname, "UTF-8");
+                String post_data = URLEncoder.encode("nameRoom", "UTF-8") + "=" + URLEncoder.encode(Roomname, "UTF-8")+ "&"
+                        + URLEncoder.encode("width", "UTF-8") + "=" + URLEncoder.encode(with, "UTF-8")+ "&"
+                        + URLEncoder.encode("length", "UTF-8") + "=" + URLEncoder.encode(length, "UTF-8")+ "&"
+                        + URLEncoder.encode("description", "UTF-8") + "=" + URLEncoder.encode(description, "UTF-8");
                 bufferedWriter.write(post_data);
                 bufferedWriter.flush();
                 bufferedWriter.close();

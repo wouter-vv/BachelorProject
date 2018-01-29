@@ -14,16 +14,48 @@
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
-        <Button
-            android:id="@+id/btnSend"
+        <TextView
+            android:id="@+id/lblDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="27dp"
-            android:onClick="OnSend"
-            android:text="Send"
-            android:layout_below="@+id/spinner1"
+            android:text="Description"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_alignBottom="@+id/txtRoomDescription"
+            android:layout_alignTop="@+id/txtRoomDescription" />
+
+        <EditText
+            android:id="@+id/txtRoomDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:selectAllOnFocus="false"
+            android:layout_centerVertical="true"
+            android:layout_alignLeft="@+id/txtRoomLength"
+            android:layout_alignStart="@+id/txtRoomLength" />
+
+        <TextView
+            android:id="@+id/lblLength"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Length"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignBottom="@+id/txtRoomLength"
+            android:layout_alignTop="@+id/txtRoomLength" />
+
+        <EditText
+            android:id="@+id/txtRoomLength"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:selectAllOnFocus="false"
+            android:layout_below="@+id/txtRoomWith"
+            android:layout_alignLeft="@+id/txtRoomWith"
+            android:layout_alignStart="@+id/txtRoomWith" />
 
         <EditText
             android:id="@+id/txtRoomName"
@@ -47,6 +79,38 @@
             android:text="Room Name" />
 
 
+        <TextView
+            android:id="@+id/lblWith"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="With"
+            android:layout_alignBottom="@+id/txtRoomWith"
+            android:layout_alignTop="@+id/txtRoomWith"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <EditText
+            android:id="@+id/txtRoomWith"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="19dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:selectAllOnFocus="false"
+            android:layout_below="@+id/txtRoomName"
+            android:layout_alignLeft="@+id/txtRoomName"
+            android:layout_alignStart="@+id/txtRoomName" />
+
+        <Button
+            android:id="@+id/btnSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="46dp"
+            android:onClick="OnSend"
+            android:text="Send"
+            android:layout_above="@+id/btnBack"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <Button
             android:id="@+id/btnBack"
