@@ -9,14 +9,6 @@ use Illuminate\Http\Request;
 
 class RoomsController extends Controller
 {
-    /**
-     * show the breweries
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
         $rooms = Rooms::get();
@@ -27,6 +19,7 @@ class RoomsController extends Controller
     {
         $room = Rooms::findOrFail($id);
         $devices = $room->devices;
-        return view('roomDetail', array('room' => $room, 'beacons' => $devices));
+        $mvalues = $room->measureValues()->orderBy('moment', 'desc')->paginate(25);
+        return view('roomDetail', array('room' => $room, 'beacons' => $devices, 'mvalues' => $mvalues));
     }
 }

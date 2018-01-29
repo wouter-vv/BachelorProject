@@ -33,30 +33,41 @@
 
                     </div>
                     <div class="row">
-                        <div class="span12">
+                        <div class="span12 ">
                             <ul class="nav nav-tabs" id="myTab">
                                 <li class="active"><a href="#home">Description</a></li>
+
                             </ul>
+                            <p id="back"><a href="/rooms"> &larr; Back to all the rooms</a></p>
                             <div class="tab-content">
-                                <div class="tab-pane active" id="home">{{ $room->nameRoom}}
+                                <table class="table table-striped span11">
+                                    <thead>
+                                    @if($mvalues)
+                                        @forelse($mvalues as $mvalue)
+                                            <tr>
+                                                <th >{{ $mvalue->moment }}</th>
+                                                <th >{{ $mvalue->valueBeacon1 }}</th>
+                                                <th >{{ $mvalue->valueBeacon2 }}</th>
+                                                <th >{{ $mvalue->valueBeacon3 }}</th>
+                                                <th >{{ $mvalue->valueBeacon4 }}</th>
+                                            </tr>
+                                        @empty
+                                            <div class="alert alert-warning col-sm-12" role="alert">
+                                                <p>You have no values yet!</p>
+                                            </div>
+                                        @endforelse
+                                    @endif
+                                    </thead>
+
+                                </table>
+
                                 </div>
-                                <div class="tab-pane" id="profile">
-                                    <table class="table table-striped shop_attributes">
-                                        <tbody>
-                                        <tr class="">
-                                            <th>Size</th>
-                                            <td>Large, Medium, Small, X-Large</td>
-                                        </tr>
-                                        <tr class="alt">
-                                            <th>Colour</th>
-                                            <td>Orange, Yellow</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                            <div>
+                                <div id="pagination">{{ $mvalues->links () }}</div>
+
                             </div>
 
-                            <p id="back"><a href="/rooms"> &larr; Back to all the rooms</a></p>
+
                         </div>
 
                     </div>

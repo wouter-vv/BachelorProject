@@ -125,4 +125,8 @@ RESPONSIVE PAGE
         margin-top: 3rem;
     }
 }
+#pagination {
+    list-style: none;
+    display: inline-block;
+}
 

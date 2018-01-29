@@ -17,8 +17,8 @@ class Rooms extends Model
     {
         return $this->hasMany('App\Devices', 'rooms_id');
     }
-    public function values()
+    public function measureValues()
     {
-        return $this->hasMany('App\Values');
+        return $this->hasMany('App\Values', 'rooms_id');
     }
 }
