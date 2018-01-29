@@ -12,17 +12,12 @@
 */
 
 Route::get('/', function () {
-    return redirect('/home');
+    return redirect('/rooms');
     
 });
 
-Route::get('/home', 'HomeController@index');
 Route::get('/rooms', 'RoomsController@index');
 Route::get('/rooms/{id}', 'RoomsController@detail')->where('id', '[0-9]+');
 
 
-Route::get('logout', 'Auth\LoginController@logout');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'RoomsController@index')->name('home');

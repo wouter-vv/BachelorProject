@@ -125,8 +125,22 @@ RESPONSIVE PAGE
         margin-top: 3rem;
     }
 }
-#pagination {
+#pagination li{
     list-style: none;
     display: inline-block;
 }
 
+#pagination {
+    text-align: center;
+}
+
+#roomtitle {
+    margin-left: 2rem;
+}
+#roomsMain {
+    list-style: none;
+}
+ #footerSentence {
+     margin-top: 1rem;
+     text-align: center;
+ }
