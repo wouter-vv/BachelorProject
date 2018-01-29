@@ -112,8 +112,7 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
         width = arr_RoomValues[0];
         length = arr_RoomValues[1];
 
-        /*hm.roomLength = Integer.parseInt(width);
-        hm.roomWidth = Integer.parseInt(length);*/
+
 
 
 
@@ -234,7 +233,7 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
                             if(c != null) {
                                 hm.values = calculateDistance(dataArray);
                                 dataArray = new Integer[] {0,0,0,0};
-                                hm.redrawHeatmap(hm,Integer.parseInt(width),Integer.parseInt(length));
+                                hm.redrawHeatmap(hm);
                             }
                             dataArray = new Integer[] {0,0,0,0};
                         }
@@ -309,8 +308,8 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
     private static class Heatmap extends View implements BeaconConsumer{
         public static int[] values = {0,0,250,250};
 
-        public int roomWidth;
-        public int roomLength;
+        public int roomWidth=3;
+        public int roomLength=6;
         int[][] room = new int[roomWidth][roomLength];
         Point beacon1 = new Point(30,30);
         Point beacon2 = new Point(30+roomWidth*200,30);
@@ -319,13 +318,11 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
         int counterOld = 0;
         int counterNew = 0;
 
-        public void redrawHeatmap(Heatmap hm, final int width, final int length) {
+        public void redrawHeatmap(Heatmap hm) {
             post(new Runnable() {
                 @Override
                 public void run() {
                     invalidate();
-                    roomWidth = width;
-                    roomLength = length;
                 }
             });
         }
