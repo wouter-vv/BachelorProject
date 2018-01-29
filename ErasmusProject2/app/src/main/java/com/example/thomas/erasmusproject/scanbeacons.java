@@ -209,8 +209,8 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
                         //Sends data to writer to database
 
                         dataArray[index] = beacons.iterator().next().getRssi();
-                        if(dataArray[0] != 0 && dataArray[1] != 0) {
-                            sendsDataDatabase(dataArray[0],dataArray[1], 0, 0);
+                        if(dataArray[0] != 0 && dataArray[1] != 0 && dataArray[3] != 0 && dataArray[4] != 0) {
+                            sendsDataDatabase(dataArray[0],dataArray[1], dataArray[3], dataArray[4]);
                             if(c != null) {
                                 hm.values = calculateDistance(dataArray);
                                 dataArray = new Integer[] {0,0,0,0};
