@@ -9,25 +9,27 @@
         <div class="row">
             <div class="span11">
                 <h2 class="title">Rooms</h2>
-                <ul class="thumbnails">
-                    <table class="table table-striped">
-                        <thead>
-                        @if($rooms)
-                            @forelse($rooms as $room)
-                                <tr>
-                                    <th ><a href="/rooms/{{ $room->id }}">{{ $room -> nameRoom }}</a></th>
-                                    <td><a href="/rooms/{{ $room->id }}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Details</a></td>
-                                </tr>
-                            @empty
-                                <div class="alert alert-warning col-sm-12" role="alert">
-                                    <p>You have no rooms yet!</p>
-                                    <a href="#">Add a room &rarr;</a>
-                                </div>
-                            @endforelse
-                        @endif
-                        </thead>
-                    </table>
-                </ul>
+
+                <div>
+                @if($rooms)
+                    <ul id="roomsMain">
+                    @forelse($rooms as $room)
+                        <li class="span3">
+                            <div class="product-box">
+                                <a href="/rooms/{{ $room->id }}"></a>
+                                <span class="sale_tag"></span>
+                                <a href="/rooms/{{ $room->id }}" class="title">{{ $room->nameRoom }}</a><br/>
+
+                            </div>
+                        </li>
+                    @empty
+                        <div class="alert alert-warning col-sm-12" role="alert">
+                            <p>You have no rooms yet!</p>
+                        </div>
+                    @endforelse
+                    </ul>
+                @endif
+                </div>
 
             </div>
             <br/>

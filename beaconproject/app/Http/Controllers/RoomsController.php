@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Devices;
 use App\Rooms;
 use App\Users;
+use App\Values;
 use Illuminate\Http\Request;
 
 class RoomsController extends Controller
@@ -12,7 +13,6 @@ class RoomsController extends Controller
     public function index()
     {
         $rooms = Rooms::get();
-
         return view('rooms', array('rooms' => $rooms));
     }
     public function detail($id)

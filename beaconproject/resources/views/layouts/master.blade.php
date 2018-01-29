@@ -61,17 +61,7 @@
 <div id="top-bar" class="container">
     <div class="row">
         <div class="span12">
-            <div class="account pull-right">
-                <ul class="user-menu">
-                    @if (Auth::check())
-                        <li><a href="/account">My account ({{ Auth::user()->firstname . ' ' . Auth::user()->lastname }})</a></li>
-                        <li><a href="/logout">Logout</a></li>
-                    @else
-                        <li><a href="/register">Register</a></li>
-                        <li><a href="/account">Login</a></li>
-                    @endif
-                </ul>
-            </div>
+
         </div>
     </div>
 </div>
@@ -83,7 +73,6 @@
                 <ul>
                     <li><a href="/home">Home</a></li>
                     <li><a href="/rooms">Rooms</a></li>
-                    <li><a href="/profile">Profile</a></li>
                 </ul>
             </nav>
         </div>
@@ -101,34 +90,10 @@
     <footer class="footer">
         <section id="footer-bar">
             <div class="row">
-                <div class="span3">
-                    <h4>Navigation</h4>
-                    <ul class="nav">
-                        <li><a href="/">Homepage</a></li>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="/account">Login</a></li>
-                    </ul>
-                </div>
-                <div class="span4">
-                    <h4>My Account</h4>
-                    <ul class="nav">
-                        <li><a href="/account">My Account</a></li>
-                        <li><a href="#">Order History</a></li>
-                        <li><a href="#">Wish List</a></li>
-                        <li><a href="#">Newsletter</a></li>
-                    </ul>
-                </div>
-                <div class="span5">
-                    <p class="logo"><h3>BBeacons</h3></p>
-                    <p>&copy; {{ \Carbon\Carbon::now()->year }} &mdash; Wouter Vande Velde  &mdash; Ikdoeict.be</p>
+
+                <div class="span12" id="footerSentence">
+                    <p>&copy; {{ \Carbon\Carbon::now()->year }} &mdash; Wouter Vande Velde, Thomas Van Raemdonck  &mdash; Ikdoeict.be</p>
                     <br/>
-                    <span class="social_icons">
-                        <a class="facebook" href="#">Facebook</a>
-                        <a class="twitter" href="#">Twitter</a>
-                        <a class="skype" href="#">Skype</a>
-                        <a class="vimeo" href="#">Vimeo</a>
-                    </span>
                 </div>
             </div>
         </section>

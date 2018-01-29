@@ -19,10 +19,10 @@
                         </div>
                         <div class="span6">
                             <dl class="dl-horizontal">
-                                <dt>size:</dt>
-                                <dd>{{ $room->nameRoom }}</dd>
-                                <dt>Percentage:</dt>
-                                <dd>{{ $room->nameRoom }}%</dd><br>
+                                <dt>length:</dt>
+                                <dd>{{ $room->length }}</dd>
+                                <dt>width:</dt>
+                                <dd>{{ $room->width }}</dd><br>
                                 <dt> {{count($beacons)}} beacons in this room:</dt>
 
                                         @foreach ($beacons as $beacon)
@@ -35,7 +35,7 @@
                     <div class="row">
                         <div class="span12 ">
                             <ul class="nav nav-tabs" id="myTab">
-                                <li class="active"><a href="#home">Description</a></li>
+                                <li class="active"><a href="#home">Values</a></li>
 
                             </ul>
                             <p id="back"><a href="/rooms"> &larr; Back to all the rooms</a></p>
