@@ -66,6 +66,9 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
     Integer[] dataArray;
     Heatmap hm;
 
+    String width;
+    String length;
+
 
 
     @Override
@@ -99,9 +102,25 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
         dataArray[2] = 0;
         dataArray[3] = 0;
 
+
+
+
+
+        SharedPreferences getShared = getSharedPreferences("RoomMeasures", MODE_PRIVATE);
+        String roomValueString = getShared.getString("RoomMeasures", "");
+        String[] arr_RoomValues = roomValueString.split(" ");
+        width = arr_RoomValues[0];
+        length = arr_RoomValues[1];
+
+
+
+
+
+
         //Calls function for higher android versions (5.0+), for authorisation
         initAndroid6();
     }
+
 
 
 
@@ -288,8 +307,9 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
     }
     private static class Heatmap extends View implements BeaconConsumer{
         public static int[] values = {0,0,250,250};
-        int roomWidth = 5;
-        int roomLength = 6;
+
+        public int roomWidth=3;
+        public int roomLength=6;
         int[][] room = new int[roomWidth][roomLength];
         Point beacon1 = new Point(30,30);
         Point beacon2 = new Point(30+roomWidth*200,30);
@@ -317,6 +337,8 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
                 }
             }
             setWillNotDraw(false);
+
+
 
         }
         @Override

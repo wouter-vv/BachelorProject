@@ -280,6 +280,43 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else if(type.equals("getWidthLength")) {
+            try {
+                SharedPreferences userDetails = context.getSharedPreferences("ipaddress", MODE_PRIVATE);
+                String ipaddress = userDetails.getString("ipaddress", "");
+
+                String nameRoom  = params[1];
+
+                String device_url = "http://" + ipaddress + "/getWithLength.php" ;
+
+                URL url = new URL(device_url);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                String post_data = URLEncoder.encode("nameRoom", "UTF-8") + "=" + URLEncoder.encode(nameRoom, "UTF-8");
+                bufferedWriter.write(post_data);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                outputStream.close();
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                String result="";
+                String line;
+                while ((line = bufferedReader.readLine()) != null)   {
+                    result += line;
+                }
+                bufferedReader.close();
+                inputStream.close();
+                httpURLConnection.disconnect();
+                return result;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
@@ -360,8 +397,20 @@ public class BackgroundWorker extends AsyncTask<String,Void, String> {
             } else if (parts[0].contentEquals("InsertRoomSuccessfull")) {
                 context.startActivity(new Intent(context, Menu.class));
             } else if(parts[0].contentEquals("NoDevice")) {
+                if(keuzeGetDevices!=0) {
+                    alertDialog.setTitle("ERROR");
+                    alertDialog.setMessage("No devices found, register first a device");
+                    alertDialog.show();
+                }
+            } else if(parts[0].contentEquals("WithLength:")) {
+                SharedPreferences devices = context.getSharedPreferences("RoomMeasures", MODE_PRIVATE);
+                SharedPreferences.Editor edit = devices.edit();
+                edit.clear();
+                edit.putString("RoomMeasures", parts[1] + " " + parts[2]);
+                edit.commit();
+            }else if(parts[0].contentEquals("RoomValuesNot")) {
                 alertDialog.setTitle("ERROR");
-                alertDialog.setMessage("No devices found, register first a device");
+                alertDialog.setMessage("Values not received");
                 alertDialog.show();
             }
         } catch ( Exception e) {

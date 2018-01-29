@@ -41,9 +41,17 @@ public class ChooseRoomScanBeacons extends AppCompatActivity {
     }
 
     public void scanBeacons(View view) {
+
+        String type1 = "getWidthLength";
+        BackgroundWorker backgroundWorker1 = new BackgroundWorker(this);
+        backgroundWorker1.execute(type1,selectedRoom);
+
+
         String type = "getDevices";
         BackgroundWorker backgroundWorker = new BackgroundWorker(this);
         backgroundWorker.execute(type,selectedRoom,"1");
+
+
     }
 
     public void back(View view) {

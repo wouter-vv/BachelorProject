@@ -46,6 +46,8 @@ public class Login extends AppCompatActivity {
                         SharedPreferences deleteRoom = this.getSharedPreferences("Room", this.MODE_PRIVATE);
                         deleteRoom.edit().remove("Room").commit();
                         String type = "login";
+
+                        this.getSharedPreferences("Device", 0).edit().clear().commit();
                         try{
                             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
                             backgroundWorker.Ipaddress = ipaddress;
