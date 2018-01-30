@@ -271,7 +271,7 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
                             });
                         }
                         else {
-                            Log.d("NEJE", "Geen beacons gevonden");
+                            Log.d(TAG, "No beacons found");
                         }
                     }
                     Log.i(TAG,"The first beacon name " + beacons.iterator().next().getBluetoothName() + " " + beacons.iterator().next().getBluetoothAddress());
@@ -308,7 +308,7 @@ public class scanbeacons extends AppCompatActivity implements BeaconConsumer{
     private static class Heatmap extends View implements BeaconConsumer{
         public static int[] values = {0,0,250,250};
 
-        public int roomWidth=3;
+        public int roomWidth=5;
         public int roomLength=6;
         int[][] room = new int[roomWidth][roomLength];
         Point beacon1 = new Point(30,30);

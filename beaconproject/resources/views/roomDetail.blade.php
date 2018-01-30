@@ -1,7 +1,7 @@
 {{-- extend the parent tpl --}}
 @extends('layouts.master')
 {{-- set the pagetitle in the parent tpl --}}
-@section('title', 'Bierologie &raquo; Beer')
+@section('title', 'BBeacons &raquo; room')
 
 @section('content')
     <p class="breadcrumb"><a href="{{ url('/')}}/">BBeacons</a> &raquo; <a href="{{ url('/rooms')}}/">Rooms</a> &raquo; {{ $room->nameRoom}}</p>

@@ -92,7 +92,7 @@
             <div class="row">
 
                 <div class="span12" id="footerSentence">
-                    <p>&copy; {{ \Carbon\Carbon::now()->year }} &mdash; Wouter Vande Velde, Thomas Van Raemdonck  &mdash; Ikdoeict.be</p>
+                    <p>&copy; {{ \Carbon\Carbon::now()->year }} &mdash; Wouter Vande Velde, Thomas Van Raemdonck  &mdash; ISEP Erasmusproject</p>
                     <br/>
                 </div>
             </div>
