@@ -23,6 +23,8 @@
                                 <dd>{{ $room->length }}</dd>
                                 <dt>width:</dt>
                                 <dd>{{ $room->width }}</dd><br>
+                                <dt>description:</dt>
+                                <dd>{{ $room->description }}</dd><br>
                                 <dt> {{count($beacons)}} beacons in this room:</dt>
 
                                         @foreach ($beacons as $beacon)
